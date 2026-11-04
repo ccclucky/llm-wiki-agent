@@ -8,6 +8,23 @@ __pycache__/
 venv/
 env/
 
-# Local Notion page-ID and block-ID mapping (workspace-specific)
+# Local credentials and workspace-specific state
+.env
+.env.*
+!.env.example
 .notion-sync-state.json
 .notion-sync-state.json.tmp
+
+# Private local intake and generated wiki data (this repository is public)
+raw/*
+!raw/.gitkeep
+wiki/**/*.md
+!wiki/index.md
+!wiki/log.md
+!wiki/overview.md
+graph/*
+!graph/.gitkeep
+
+# Local reports and caches
+*-report.md
+*.local.json
