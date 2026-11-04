@@ -20,7 +20,7 @@ The Skill is the workflow. Notion MCP is the connection. Notion is the canonical
 ~~~text
 Claude Code ─┐
 Codex ───────┼── each agent installs this Skill
-Other agents ┘    and connects its own Notion MCP
+WorkBuddy ───┘    and connects its own Notion MCP
                          │
                          ▼
                 CCLUCKY LLM Wiki Skill
@@ -36,10 +36,12 @@ Other agents ┘    and connects its own Notion MCP
 - **No repository clone is required for daily use.**
 - **No custom MCP server is required.**
 - Each agent configures its own Notion MCP connection and authorizes the same workspace.
-- Each agent installs the same Skill package from this repository.
+- Each agent installs the same canonical Skill content; client-specific packaging is generated from the same source.
 - All agents read and write the same Notion pages and RAW database.
 
 ## Install
+
+### Claude Code and Codex
 
 The current development branch can be installed with the Skills CLI:
 
@@ -53,7 +55,21 @@ After this branch is merged into main, the shorter command is:
 npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
 ~~~
 
-For another compatible agent, select it with the Skills CLI if supported, or copy **SKILL.md** and the **references/** directory into its supported skills directory.
+### WorkBuddy
+
+WorkBuddy imports a local Skill package through its UI. Build the package:
+
+~~~bash
+python scripts/package_workbuddy_skill.py
+~~~
+
+Then open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill** and upload `dist/cclucky-llm-wiki-workbuddy.zip`.
+
+See [docs/workbuddy-installation.md](docs/workbuddy-installation.md) for details.
+
+### Other compatible agents
+
+Use the client's documented Skill installation method. If the client is not supported by the Skills CLI, copy **SKILL.md** and **references/** into its supported skills directory.
 
 Then connect that agent to Notion using the official remote MCP endpoint:
 
