@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,6 +8,31 @@ __pycache__/
 venv/
 env/
 
-# Local Notion page-ID and block-ID mapping (workspace-specific)
+# Local Notion state and credentials
 .notion-sync-state.json
 .notion-sync-state.json.tmp
+.env
+.env.*
+!.env.example
+
+# User source material: never commit
+/raw/*
+!/raw/.gitkeep
+
+# Generated local wiki content: never commit
+/wiki/sources/*
+/wiki/entities/*
+/wiki/concepts/*
+/wiki/syntheses/*
+/wiki/log.md
+/wiki/lint-report.md
+/wiki/health-report.md
+
+# Generated graph data and visualizations
+/graph/*
+!/graph/.gitkeep
+
+# Temporary / debug output
+*.tmp
+*.bak
+ingest_debug.txt
