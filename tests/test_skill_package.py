@@ -1,5 +1,9 @@
 import re
+import subprocess
+import sys
+import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -31,13 +35,53 @@ class SkillPackageTests(unittest.TestCase):
         self.assertRegex(frontmatter, r"(?m)^name: cclucky-llm-wiki$")
         self.assertRegex(frontmatter, r"(?m)^description: .+")
 
+    def test_workbuddy_frontmatter_has_required_marketplace_metadata(self):
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        frontmatter = skill.split("---", 2)[1]
+        for field in (
+            "display_name",
+            "display_name_en",
+            "description_zh",
+            "description_en",
+            "version",
+            "author",
+        ):
+            with self.subTest(field=field):
+                self.assertRegex(frontmatter, rf"(?m)^{field}: .+")
+
     def test_referenced_workflow_files_exist(self):
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         references = re.findall(r"\]\((references/[^)]+)\)", skill)
+        references.extend(re.findall(r"(?m)^@references/(\S+)$", skill))
         self.assertTrue(references)
         for reference in references:
             with self.subTest(reference=reference):
                 self.assertTrue((ROOT / reference).is_file())
+
+    def test_workbuddy_package_contains_skill_and_all_references(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "cclucky-llm-wiki-workbuddy.zip"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "package_workbuddy_skill.py"),
+                    "--output",
+                    str(output),
+                ],
+                check=True,
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            with zipfile.ZipFile(output) as archive:
+                names = set(archive.namelist())
+            self.assertIn("cclucky-llm-wiki/SKILL.md", names)
+            for reference in sorted((ROOT / "references").rglob("*.md")):
+                archive_path = (
+                    "cclucky-llm-wiki/" + reference.relative_to(ROOT).as_posix()
+                )
+                with self.subTest(reference=archive_path):
+                    self.assertIn(archive_path, names)
 
     def test_public_docs_contain_no_workspace_ids_or_secrets(self):
         workspace_id_patterns = [
@@ -75,6 +119,7 @@ class SkillPackageTests(unittest.TestCase):
         self.assertIn("/raw/*", gitignore)
         self.assertIn("/wiki/*", gitignore)
         self.assertIn("/graph/*", gitignore)
+        self.assertIn("/dist/", gitignore)
 
 
 if __name__ == "__main__":
