@@ -13,7 +13,7 @@ This checklist verifies a real Agent's Skill + Notion MCP integration. It is int
 
 ## End-to-end test
 
-1. **Capture:** create a Inbox record with Status = Inbox, accurate Source Type, source date/origin, Captured By, useful Tags, and original content in the page body.
+1. **Capture:** create an Inbox record with Status = Inbox, accurate Source Type, source date/origin, Captured By, useful Tags, and original content in the page body.
 2. **Claim:** re-fetch the record; if another active Agent has claimed it, stop. Set Status = Processing, Processing By, and Processing Started At.
 3. **Resolve:** search for existing canonical pages before creating anything. Distinguish source facts, user statements, source claims, analysis, and hypotheses.
 4. **Write:** create/update one Source page and only the necessary Entity / Concept pages. Preserve source provenance and dates.
