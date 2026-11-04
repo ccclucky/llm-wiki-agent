@@ -44,6 +44,7 @@ class NotionIngestContractTests(unittest.TestCase):
         self.assertIn("verify that the target page shows the new inbound reference", ingest)
         self.assertIn("Status: Processed if complete; otherwise Needs Review", ingest)
         self.assertIn("Never delete the RAW record", ingest)
+        self.assertIn("RAW record to its resulting Source page", ingest)
 
     def test_processing_fields_are_not_a_distributed_lock(self):
         ingest = read("references/ingest.md")
