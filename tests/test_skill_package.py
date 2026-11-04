@@ -28,6 +28,11 @@ class SkillPackageTests(unittest.TestCase):
         self.assertIsNone(re.search(r"(?i)\b[0-9a-f]{32}\b", content))
         self.assertIsNone(re.search(r"(?i)(secret_|sk-[a-z0-9]{16,}|AIzaSy[a-z0-9_-]{16,})", content))
 
+    def test_legacy_local_schema_is_preserved(self):
+        from tools._utils import SCHEMA_FILE
+
+        self.assertTrue(SCHEMA_FILE.is_file())
+
     def test_local_user_data_is_ignored(self):
         gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
         self.assertIn("/raw/*", gitignore)
