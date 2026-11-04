@@ -27,7 +27,7 @@ Use the source content actually available to the agent. Do not claim to have rea
 2. Fetch the data source schema before writing.
 3. Search Inbox for a likely duplicate using source URL, title, and content fingerprint where available.
 4. If the same source already exists, update or reference that record rather than creating a duplicate. If it was already Processed and the content is unchanged, report that it is already ingested.
-5. Create a Inbox database page with:
+5. Create an Inbox database record with:
    - Name: concise source title;
    - Status: Inbox;
    - Source Type: the closest supported type;
@@ -35,7 +35,7 @@ Use the source content actually available to the agent. Do not claim to have rea
    - Captured By: current agent/client;
    - Tags: only useful tags;
    - Content Hash: optional stable fingerprint.
-6. Put the original source text in the Inbox page body. For a file, attach it or include the extracted content; for a very large source, preserve the file/reference and a clear extraction note. Never silently truncate without saying so.
+6. Put the original source text in the Inbox record body. For a file, attach it or include the extracted content; for a very large source, preserve the file/reference and a clear extraction note. Never silently truncate without saying so.
 
 Do not start knowledge transformation before the original material is safely captured.
 
