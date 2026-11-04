@@ -4,6 +4,14 @@ The user experience must remain simple: provide material, say "ingest" or "/inge
 
 ## 1. Accept the source
 
+There are two supported intake patterns:
+
+- **Direct capture:** the user gives the material in chat or as a file/URL and asks to ingest it. Capture it into RAW, then process it.
+- **Manual RAW drop:** the user has already created a record in the Notion RAW database. Find that record and process it without creating another RAW entry.
+
+If the user asks to "process the RAW inbox" or "ingest pending items", query records with Status = Inbox and process them sequentially. Respect records already marked Processing by another agent. Do not start an unbounded batch without reporting its scope.
+
+
 Sources may be:
 - text pasted into the conversation;
 - a conversation summary the user explicitly asks to preserve;
