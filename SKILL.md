@@ -86,7 +86,6 @@ The following Markdown links are the canonical references. The `@references/` de
 - Lint and graph: [references/maintenance.md](references/maintenance.md)
 - Notion schema: [references/notion-schema.md](references/notion-schema.md)
 - Multi-agent safety and privacy: [references/security-and-concurrency.md](references/security-and-concurrency.md)
-- End-to-end acceptance: [docs/notion-ingest-acceptance.md](docs/notion-ingest-acceptance.md)
 
 @references/ingest.md
 @references/query-update.md
