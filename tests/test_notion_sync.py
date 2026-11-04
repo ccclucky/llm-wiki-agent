@@ -62,6 +62,28 @@ class MarkdownConversionTests(unittest.TestCase):
         runs = rich_text_runs("x" * 4501)
         self.assertEqual([len(run["text"]["content"]) for run in runs], [2000, 2000, 501])
 
+    def test_existing_notion_container_is_reused(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from tools.notion_sync import _ensure_container, save_state
+
+        class FakeClient:
+            def list_child_pages(self, block_id):
+                self.seen_root = block_id
+                return {"Sources": "existing-sources-page"}
+
+            def create_page(self, parent_page_id, title):
+                raise AssertionError("Existing category pages must not be duplicated")
+
+        with TemporaryDirectory() as directory:
+            state_path = Path(directory) / "state.json"
+            state = {"version": 1, "root_page_id": "root", "containers": {}, "pages": {}}
+            client = FakeClient()
+            page_id = _ensure_container(client, "root", "Sources", state, state_path)
+            self.assertEqual(page_id, "existing-sources-page")
+            self.assertEqual(client.seen_root, "root")
+            self.assertEqual(state["containers"]["Sources"], "existing-sources-page")
+
 
 if __name__ == "__main__":
     unittest.main()

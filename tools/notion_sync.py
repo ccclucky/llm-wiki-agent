@@ -119,6 +119,28 @@ class NotionClient:
             "properties": {"title": {"title": [{"type": "text", "text": {"content": title[:2000]}}]}},
         })
 
+    def list_child_pages(self, block_id: str) -> dict[str, str]:
+        """Return immediate child pages keyed by title, following Notion pagination."""
+        pages: dict[str, str] = {}
+        cursor: str | None = None
+        while True:
+            query = {"page_size": 100}
+            if cursor:
+                query["start_cursor"] = cursor
+            path = f"/blocks/{block_id}/children?{urllib.parse.urlencode(query)}"
+            result = self.request("GET", path)
+            for block in result.get("results", []):
+                if block.get("type") == "child_page":
+                    title = block.get("child_page", {}).get("title", "")
+                    if title and block.get("id"):
+                        pages.setdefault(title, block["id"])
+            if not result.get("has_more"):
+                break
+            cursor = result.get("next_cursor")
+            if not cursor:
+                break
+        return pages
+
     def append_children(self, block_id: str, children: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not children:
             return []
@@ -324,8 +346,16 @@ def _ensure_container(
     page_id = state["containers"].get(category)
     if page_id:
         return page_id
-    created = client.create_page(root_page_id, category)
-    page_id = created["id"]
+
+    # Reuse pages the user already created in Notion. This is important when
+    # bootstrapping an existing workspace: never create duplicate category
+    # pages simply because the local sync-state file does not exist yet.
+    existing_pages = client.list_child_pages(root_page_id)
+    page_id = existing_pages.get(category)
+    if not page_id:
+        created = client.create_page(root_page_id, category)
+        page_id = created["id"]
+
     state["containers"][category] = page_id
     save_state(state_path, state)
     return page_id
