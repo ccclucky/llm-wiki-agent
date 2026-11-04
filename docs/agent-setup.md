@@ -4,13 +4,44 @@ The repository distributes the Skill. It is not a server and does not need to be
 
 ## One-time setup per agent
 
-1. Install the **cclucky-llm-wiki** Skill from this repository using the agent's supported Agent Skills installer, or copy the Skill package (SKILL.md plus references/) into that agent's skills directory.
-2. Configure that agent's own Notion MCP connection using the agent's normal MCP settings.
-3. Use Notion's official remote MCP endpoint: https://mcp.notion.com/mcp
-4. Complete OAuth/authorization in that agent and grant access to the **CCLUCKY Knowledge OS** root page, including Inbox, RAW, Sources, Entities, Concepts, Syntheses, and System.
-5. Ask the agent to verify it can find and read the RAW database **RAW · 原始资料收件箱** and can create/update pages.
+### 1. Install the Skill
 
-Exact configuration steps differ by client and are intentionally not embedded here. This project does not manage client-specific MCP settings or credentials.
+Using the Skills CLI, install the current development branch:
+
+~~~bash
+npx skills add https://github.com/ccclucky/llm-wiki-agent/tree/feat/notion-first-agent-skill -g
+~~~
+
+After the branch is merged into main:
+
+~~~bash
+npx skills add ccclucky/llm-wiki-agent -g
+~~~
+
+You can target supported agents explicitly, for example with -a claude-code or -a codex. For clients not supported by the CLI, copy SKILL.md and references/ into that client's skills directory.
+
+### 2. Connect Notion MCP
+
+Configure that agent's own Notion MCP connection using the agent's normal MCP settings.
+
+Official remote MCP endpoint:
+
+~~~text
+https://mcp.notion.com/mcp
+~~~
+
+Complete OAuth/authorization in that agent and grant access to the **CCLUCKY Knowledge OS** root page, including Inbox, RAW, Sources, Entities, Concepts, Syntheses, and System.
+
+### 3. Verify access
+
+Ask the agent to verify it can:
+- find CCLUCKY Knowledge OS;
+- read the RAW database RAW · 原始资料收件箱 and its schema;
+- create a RAW record;
+- read and update pages under Sources, Entities, Concepts, Syntheses, and System;
+- create native Notion page mentions.
+
+Exact MCP configuration steps differ by client and are intentionally not embedded here. This project does not manage client-specific MCP settings or credentials.
 
 ## No repository clone required
 
