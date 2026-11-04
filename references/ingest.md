@@ -6,10 +6,10 @@ The user experience must remain simple: provide material, say "ingest" or "/inge
 
 There are two supported intake patterns:
 
-- **Direct capture:** the user gives the material in chat or as a file/URL and asks to ingest it. Capture it into Inbox, then process it.
-- **Manual Inbox drop:** the user has already created a record in the Notion Inbox database. Find that record and process it without creating another Inbox entry.
+- **Direct capture:** the user gives the material in chat or as a file/URL and asks to ingest it. Capture it as a Rows record through the Inbox workspace, then process it.
+- **Manual Rows drop:** the user has already created a record in the Notion Rows database. Find that record and process it without creating another Rows record.
 
-If the user asks to "process pending Inbox records" or "ingest pending items", query records with Status = Inbox and process them sequentially. Respect records already marked Processing by another agent. Do not start an unbounded batch without reporting its scope.
+If the user asks to "process pending Rows records" or "ingest pending items", query records with Status = Pending and process them sequentially. Respect records already marked Processing by another agent. Do not start an unbounded batch without reporting its scope.
 
 
 Sources may be:
@@ -21,34 +21,34 @@ Sources may be:
 
 Use the source content actually available to the agent. Do not claim to have read an attachment or URL that was not accessible. For a URL, retrieve the page using an appropriate connected browser/search tool before ingesting it; preserve the URL as provenance.
 
-## 2. Capture into Inbox first
+## 2. Capture into Rows first
 
-1. Discover the shared Inbox database using the workspace structure in [notion-schema.md](notion-schema.md).
+1. Discover the Rows database nested under the Inbox workspace using the workspace structure in [notion-schema.md](notion-schema.md).
 2. Fetch the data source schema before writing.
-3. Search Inbox for a likely duplicate using source URL, title, and content fingerprint where available.
+3. Search Rows for a likely duplicate using source URL, title, and content fingerprint where available.
 4. If the same source already exists, update or reference that record rather than creating a duplicate. If it was already Processed and the content is unchanged, report that it is already ingested.
-5. Create an Inbox database record with:
+5. Create a Rows database record with:
    - Name: concise source title;
-   - Status: Inbox;
+   - Status: Pending;
    - Source Type: the closest supported type;
    - Source URL / Source Date when known;
    - Captured By: current agent/client;
    - Tags: only useful tags;
    - Content Hash: optional stable fingerprint.
-6. Put the original source text in the Inbox record body. For a file, attach it or include the extracted content; for a very large source, preserve the file/reference and a clear extraction note. Never silently truncate without saying so.
+6. Put the original source text in the Rows record body. For a file, attach it or include the extracted content; for a very large source, preserve the file/reference and a clear extraction note. Never silently truncate without saying so.
 
 Do not start knowledge transformation before the original material is safely captured.
 
 ## 3. Claim the item
 
-Before processing, re-fetch the Inbox record.
+Before processing, re-fetch the Rows record.
 
 - If Status is Processed, check whether the content changed before reprocessing.
 - If Status is Processing and Processing By identifies another agent, do not process it concurrently. Report that another agent has claimed it.
 - If Status is Processing but the recorded start is clearly stale, inspect the record and its partial output. Only reclaim it after determining that the previous run is no longer active.
 - Set Status to Processing, Processing By to the current agent/client, Processing Started At to now, and clear stale Processing Notes.
 
-Notion does not provide a transaction or compare-and-swap lock through every MCP client. This status protocol reduces collisions but is not a perfect distributed lock. Avoid simultaneous ingest runs for the same Inbox record.
+Notion does not provide a transaction or compare-and-swap lock through every MCP client. This status protocol reduces collisions but is not a perfect distributed lock. Avoid simultaneous ingest runs for the same Rows record.
 
 ## 4. Understand the source against existing knowledge
 
@@ -124,13 +124,13 @@ For every important connection:
 
 One native mention creates the target page's backlink. Do not add redundant reciprocal mentions. The wiki graph is the network of canonical pages and their native mentions/backlinks.
 
-For Inbox ingestion, also add a native mention from the Inbox record to its resulting Source page (for example, an `Ingest Result` section), and keep the Source page's native mention back to the Inbox record as provenance. These two directions serve different navigation purposes; this is intentional, not a rule to add reciprocal mentions for every relationship.
+For Rows ingestion, also add a native mention from the Rows record to its resulting Source page (for example, an `Ingest Result` section), and keep the Source page's native mention back to the Rows record as provenance. These two directions serve different navigation purposes; this is intentional, not a rule to add reciprocal mentions for every relationship.
 
 Prefer a few high-value links over link spam. Do not link every repeated word.
 
 ## 7. Validate and complete
 
-Before marking the Inbox record Processed:
+Before marking the Rows record Processed:
 - verify the source page exists;
 - verify every created/updated page exists;
 - verify internal references resolve to real Notion pages;
@@ -139,14 +139,14 @@ Before marking the Inbox record Processed:
 - verify important backlinks when the client supports it;
 - record contradictions or review requirements.
 
-Then update the Inbox record:
+Then update the Rows record:
 - Status: Processed if complete; otherwise Needs Review;
 - Processed At: current time if complete;
 - Ingest Summary: concise summary of what changed;
 - Processing By: current agent/client;
 - Processing Notes: warnings, unresolved items, or recovery details.
 
-Never delete the Inbox record after successful ingestion.
+Never delete the Rows record after successful ingestion.
 
 ## 8. User-facing result
 
