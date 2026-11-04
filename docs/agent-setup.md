@@ -51,7 +51,7 @@ Official remote MCP endpoint:
 https://mcp.notion.com/mcp
 ~~~
 
-Complete OAuth/authorization in that agent and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox database, Inbox · 使用说明, Sources, Entities, Concepts, Syntheses, and System.
+Complete OAuth/authorization in that agent and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox workspace, its nested Rows database, Sources, Entities, Concepts, Syntheses, and System.
 
 The Skill does not configure MCP, manage OAuth, or share credentials between agents. Never paste a Notion token into chat or commit it to this repository.
 
@@ -59,8 +59,8 @@ The Skill does not configure MCP, manage OAuth, or share credentials between age
 
 Ask the agent to verify it can:
 - find CCLUCKY Knowledge OS;
-- read the Inbox · 原始资料收件箱 database and its schema;
-- create an Inbox record;
+- read the Rows database nested under Inbox and its schema;
+- create a Rows record;
 - read and update pages under Sources, Entities, Concepts, Syntheses, and System;
 - create native Notion page mentions;
 - inspect backlinks when the client's MCP exposes that operation.
@@ -69,7 +69,7 @@ Exact MCP configuration steps differ by client and are intentionally not embedde
 
 ## 4. Run end-to-end acceptance
 
-Follow [the Notion Ingest acceptance checklist](notion-ingest-acceptance.md) independently in each client. Skill discovery alone is not enough: verify Inbox writes, native mentions, backlinks, and status completion through that client's actual Notion MCP connection.
+Follow [the Notion Ingest acceptance checklist](notion-ingest-acceptance.md) independently in each client. Skill discovery alone is not enough: verify Rows writes, native mentions, backlinks, and status completion through that client's actual Notion MCP connection.
 
 Use a real, non-sensitive source the user wants to preserve, or a test source the user has explicitly approved. Do not create throwaway personal-knowledge records merely to test the connection.
 
@@ -83,12 +83,12 @@ The portable entrypoint across clients is natural language. A single Skill does 
 - "更新某个项目的知识"
 - "检查知识库里的孤立页面和矛盾"
 
-The Skill uses the connected Notion MCP. The user does not need to clone the repository, maintain local Markdown files, or create a separate Inbox database for each agent.
+The Skill uses the connected Notion MCP. The user does not need to clone the repository, maintain local Markdown files, or create a separate Rows database for each agent.
 
 ## Troubleshooting
 
 - **Skill loads but cannot find the workspace:** verify the Notion MCP account and page permissions.
-- **Workspace found but Inbox database missing:** locate the exact Inbox database directly under Knowledge OS; do not create a duplicate without checking with the user.
+- **Workspace found but Rows database missing:** locate the exact Rows database directly under Knowledge OS; do not create a duplicate without checking with the user.
 - **Read works but write fails:** check whether the Notion MCP connection has edit access.
 - **Agent has no Notion MCP tools:** configure Notion MCP in that agent first. Do not fall back to local files and claim shared knowledge access.
 - **Backlinks cannot be inspected:** native page mentions still create Notion backlinks, but report verification as unavailable rather than claiming it was checked.
