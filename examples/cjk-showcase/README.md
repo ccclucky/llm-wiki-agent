@@ -1,14 +1,11 @@
-# CJK Showcase (Chinese Language Example)
+# CJK Showcase (Synthetic Chinese Example)
 
-This directory demonstrates how LLM Wiki Agent performs with Non-English (CJK) languages.
+This directory contains a fully synthetic Chinese-language fixture for testing CJK ingestion, entity extraction, concept linking, and search behavior.
 
-The agent naturally supports processing Chinese content. With the CJK query bug fixed, you can ingest, query, and linguistically search across Chinese entries without any language-specific configuration. 
+The example does not describe a real person, company, user, or private reflection.
 
-## Files included in this showcase:
+## Included source
 
-- `raw/2026-04-13-reflection.md`: A sample source document (a personal reflection on career transition).
-- `wiki/sources/2026-04-13-reflection.md`: The parsed structured source page.
-- `wiki/entities/杨帆.md`: Auto-extracted Chinese entity page.
-- `wiki/concepts/AI转型.md`: Auto-extracted Chinese concept page.
+- raw/2026-04-13-reflection.md — fictional product-team scenario about evaluating an AI assistant.
 
-Try running `python tools/query.py "关于AI转型的建议"` from the root directory after moving these to your main knowledge base to see how semantic extraction and keyword matching behave in non-English contexts!
+To try the legacy local mode, copy the sample into your private local RAW directory and run the local ingest tool. The default Notion-first workflow uses the shared Notion RAW database instead.
