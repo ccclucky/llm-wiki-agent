@@ -51,7 +51,7 @@ Safe automatic repairs:
 - update an index/navigation page after creating a canonical page.
 
 Require user confirmation:
-- delete pages or RAW records;
+- delete pages or Inbox records;
 - merge pages where information could be lost;
 - resolve a substantive contradiction;
 - rewrite a user's stated position or decision;
