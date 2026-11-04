@@ -46,7 +46,7 @@ Read [references/notion-schema.md](references/notion-schema.md) when discovering
 | "检查知识库" / "lint" / "/lint" | [Maintenance](references/maintenance.md) |
 | "查看知识关系" / "build graph" / "/graph" | [Maintenance](references/maintenance.md) |
 
-If the agent supports slash-command invocation, expose the short aliases /ingest, /query, /lint, and /graph. Otherwise, natural-language requests must trigger the same workflows.
+The portable cross-agent interface is natural language. A single Agent Skill does not register /ingest, /query, /lint, and /graph as native slash commands in every client. If a client provides command aliases, they may map to these workflows; otherwise invoke this Skill by its installed name or simply describe the task.
 
 ## Operating rules
 
