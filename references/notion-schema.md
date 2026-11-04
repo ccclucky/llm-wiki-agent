@@ -5,20 +5,20 @@
 Discover pages by title; do not hardcode page IDs in this public Skill.
 
 - Root: **CCLUCKY Knowledge OS**
-- Intake database: **Inbox · 原始资料收件箱** (directly under the Knowledge OS root)
-- Instructions page: **Inbox · 使用说明** (navigation only; not a second database)
+- Workspace page: **Inbox** (the user-facing collection dashboard, directly under Knowledge OS)
+- Intake database: **Rows** (the single canonical original-material database nested under Inbox)
 - Knowledge sections under the root: **Sources**, **Entities**, **Concepts**, **Syntheses**, **System**
 
 The workspace may evolve. Always search and fetch the current page/database before relying on its structure.
 
-## Inbox database properties
+## Rows database properties
 
 Fetch the database's data source and use its exact property names and types.
 
 | Property | Type | Purpose |
 |---|---|---|
 | Name | Title | Human-readable source title |
-| Status | Select | Inbox / Processing / Processed / Needs Review |
+| Status | Select | Pending / Processing / Processed / Needs Review |
 | Source Type | Select | Conversation / Article / Document / Meeting / Code/PR / Idea / Other |
 | Source URL | URL | Original external source, if any |
 | Source Date | Date | Date of the source, if known |
@@ -31,7 +31,7 @@ Fetch the database's data source and use its exact property names and types.
 | Ingest Summary | Rich text | Short processing result |
 | Content Hash | Rich text | Optional stable content fingerprint |
 
-The Notion page body of each Inbox record holds the original content or a durable source reference plus enough captured text to preserve what was ingested. Do not store a large source only in a short metadata property.
+The Notion page body of each Rows record holds the original content or a durable source reference plus enough captured text to preserve what was ingested. Do not store a large source only in a short metadata property.
 
 Notion's system-created page timestamp is the capture time; do not try to write to it.
 
