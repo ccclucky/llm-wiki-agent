@@ -33,7 +33,7 @@ class NotionIngestContractTests(unittest.TestCase):
         self.assertLess(capture, claim)
         self.assertIn("Status: Inbox", ingest)
         self.assertIn("Set Status to Processing", ingest)
-        self.assertIn("original source text in the Inbox page body", ingest)
+        self.assertIn("original source text in the Inbox record body", ingest)
 
     def test_processed_requires_native_mentions_and_backlink_validation(self):
         ingest = read("references/ingest.md")
