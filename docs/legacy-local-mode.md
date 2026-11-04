@@ -11,7 +11,7 @@ It is **not** the default CCLUCKY multi-agent workflow. It does not provide one 
 - graph/ — generated graph data and HTML visualization
 - tools/ — Python utilities for ingest, query, lint, health, refresh, and graph generation
 
-These directories are local user data and are excluded from Git. Do not force-add their contents to this public repository.
+These directories are local user data and are excluded from Git. Do not force-add their contents to this public repository. The original local workflow schema is preserved at legacy/LOCAL_WIKI_SCHEMA.md; the root agent instruction files now point to the Notion-first Skill.
 
 ## Basic commands
 
