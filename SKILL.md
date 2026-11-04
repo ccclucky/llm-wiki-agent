@@ -1,6 +1,20 @@
 ---
 name: cclucky-llm-wiki
-description: Use this skill to capture, ingest, query, update, lint, and map a Notion-backed personal knowledge wiki. Trigger whenever the user asks to save knowledge, ingest a source, remember a project decision, search prior knowledge, update a knowledge page, check contradictions, or inspect knowledge relationships.
+display_name: CCLUCKY 个人知识库
+display_name_en: CCLUCKY LLM Wiki
+description: Capture, ingest, query, update, lint, and map a Notion-backed personal knowledge wiki. Use when the user asks to save knowledge, ingest a source, recall a project decision, search prior knowledge, or audit wiki relationships.
+description_zh: 统一管理共享 Notion 个人知识库，支持 RAW 收集、知识沉淀、查询更新和质量检查。
+description_en: Maintain a shared Notion-backed personal wiki across connected AI agents.
+version: 0.1.0
+author: CCLUCKY
+examples_zh:
+  - "把这篇文章沉淀到我的知识库"
+  - "查询我之前记录的项目决策"
+  - "检查知识库里的孤立页面和矛盾"
+examples_en:
+  - "Ingest this article into my wiki"
+  - "Find the project decision I recorded earlier"
+  - "Check the wiki for orphan pages and contradictions"
 ---
 
 # CCLUCKY LLM Wiki
@@ -65,10 +79,20 @@ The portable cross-agent interface is natural language. A single Agent Skill doe
 
 ## Detailed workflows
 
-- Ingest: read [references/ingest.md](references/ingest.md).
-- Query and update: read [references/query-update.md](references/query-update.md).
-- Lint and graph: read [references/maintenance.md](references/maintenance.md).
-- Multi-agent safety and privacy: read [references/security-and-concurrency.md](references/security-and-concurrency.md).
+The following Markdown links are the canonical references. The `@references/` declarations additionally enable WorkBuddy's sub-resource loader.
+
+- Ingest: [references/ingest.md](references/ingest.md)
+- Query and update: [references/query-update.md](references/query-update.md)
+- Lint and graph: [references/maintenance.md](references/maintenance.md)
+- Notion schema: [references/notion-schema.md](references/notion-schema.md)
+- Multi-agent safety and privacy: [references/security-and-concurrency.md](references/security-and-concurrency.md)
+- End-to-end acceptance: [docs/notion-ingest-acceptance.md](docs/notion-ingest-acceptance.md)
+
+@references/ingest.md
+@references/query-update.md
+@references/maintenance.md
+@references/notion-schema.md
+@references/security-and-concurrency.md
 
 ## Completion report
 
