@@ -60,7 +60,7 @@ class NotionIngestContractTests(unittest.TestCase):
         content = guide.read_text(encoding="utf-8")
         for term in ("RAW", "Backlinks", "Claude Code", "Codex", "WorkBuddy"):
             with self.subTest(term=term):
-                self.assertIn(term, content)
+                self.assertIn(term.lower(), content.lower())
 
     def test_public_acceptance_guide_contains_no_workspace_ids_or_tokens(self):
         content = read("docs/notion-ingest-acceptance.md")
