@@ -27,6 +27,9 @@ env/
 /graph/*
 !/graph/.gitkeep
 
+# Generated client packages
+/dist/
+
 # Temporary / debug output
 *.tmp
 *.bak
