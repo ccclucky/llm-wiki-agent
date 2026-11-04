@@ -47,8 +47,8 @@ WorkBuddy documents support for MCP transports including HTTP/SSE/stdio and for 
 In a new WorkBuddy conversation, ask it to:
 1. identify the installed CCLUCKY LLM Wiki Skill;
 2. find CCLUCKY Knowledge OS and read Agent Context Protocol;
-3. locate the Inbox database and read its current schema;
-4. confirm it can create/update an Inbox record and a Source page;
+3. locate the Rows database nested under Inbox and read its current schema;
+4. confirm it can create/update a Rows record and a Source page;
 5. confirm it can create a native Notion page mention and query backlinks.
 
 Then run the [end-to-end acceptance checklist](notion-ingest-acceptance.md) using a real, non-sensitive source the user wants to preserve, or a test source explicitly approved by the user.
