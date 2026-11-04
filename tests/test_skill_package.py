@@ -52,7 +52,10 @@ class SkillPackageTests(unittest.TestCase):
     def test_referenced_workflow_files_exist(self):
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         references = re.findall(r"\]\((references/[^)]+)\)", skill)
-        references.extend(re.findall(r"(?m)^@references/(\S+)$", skill))
+        references.extend(
+            reference[1:]
+            for reference in re.findall(r"(?m)^(@references/\S+)$", skill)
+        )
         self.assertTrue(references)
         for reference in references:
             with self.subTest(reference=reference):
