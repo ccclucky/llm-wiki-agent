@@ -77,7 +77,7 @@ Once the Skill and Notion MCP are connected, use natural language:
 | Lint | "检查知识库里的孤立页面、重复页面和矛盾" |
 | Graph | "梳理 Agent、项目和技术概念之间的关系" |
 
-Compatible agents may expose the workflows as /ingest, /query, /lint, and /graph. Other agents use the same natural-language triggers.
+Natural language is the portable cross-agent interface. Some clients can add /ingest, /query, /lint, and /graph aliases, but installing one Skill does not register those slash commands in every client.
 
 ## Knowledge model
 
