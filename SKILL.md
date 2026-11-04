@@ -3,7 +3,7 @@ name: cclucky-llm-wiki
 display_name: CCLUCKY 个人知识库
 display_name_en: CCLUCKY LLM Wiki
 description: Capture, ingest, query, update, lint, and map a Notion-backed personal knowledge wiki. Use when the user asks to save knowledge, ingest a source, recall a project decision, search prior knowledge, or audit wiki relationships.
-description_zh: 统一管理共享 Notion 个人知识库，支持 Inbox 收集、知识沉淀、查询更新和质量检查。
+description_zh: 统一管理共享 Notion 个人知识库，通过 Inbox 工作台和 Rows 数据库收集资料，支持知识沉淀、查询更新和质量检查。
 description_en: Maintain a shared Notion-backed personal wiki across connected AI agents.
 version: 0.1.0
 author: CCLUCKY
@@ -21,13 +21,13 @@ examples_en:
 
 A shared, Notion-backed LLM Wiki. Preserve the simple workflow of the original Obsidian LLM Wiki:
 
-**Put material in Inbox → run Ingest → the agent maintains the wiki.**
+**Capture material in Rows through Inbox → run Ingest → the agent maintains the wiki.**
 
 This repository distributes the workflow as one portable Skill. It does not host a server, store user knowledge, manage Notion credentials, or configure an agent's MCP connection.
 
 ## Non-negotiable architecture
 
-- **Notion is the canonical store.** All agents work against the same Notion workspace and the same Inbox database.
+- **Notion is the canonical store.** All agents work against the same Notion workspace and the same Rows database.
 - **The connected Notion MCP is the transport.** Use the current agent's available Notion MCP tools. Tool names vary between clients; discover their capabilities rather than assuming exact names.
 - **This Skill is the workflow.** It defines how to capture, ingest, query, update, lint, and map knowledge.
 - **Do not use the repository's local raw/ or wiki/ folders as the default knowledge store.** They belong to the legacy local/Obsidian mode only.
@@ -41,14 +41,14 @@ Before the first operation in a session:
 
 1. Confirm that a Notion MCP connection is available and supports the required read/write operations.
 2. Search for the exact root page **CCLUCKY Knowledge OS**. Do not create another root page if it is missing; report an access or connection problem.
-3. Locate the **Inbox · 原始资料收件箱** database directly under the root. The separate **Inbox · 使用说明** page is navigation and instructions only.
-4. Fetch the Inbox database/data-source schema before creating or updating database records.
+3. Locate the **Inbox** workspace page under the root, then locate its nested **Rows** database. Inbox is the user-facing workspace; Rows is the canonical original-material database.
+4. Fetch the Rows database/data-source schema before creating or updating database records.
 5. Locate the existing **Sources**, **Entities**, **Concepts**, **Syntheses**, and **System** sections under the root page.
 6. Read only the pages relevant to the current task. Do not load the entire workspace by default.
 
 If Notion MCP is not connected, explain that the user must connect Notion in this agent first. Do not silently fall back to local Markdown, another workspace, or a newly created knowledge base.
 
-Read [references/notion-schema.md](references/notion-schema.md) when discovering the workspace or Inbox schema.
+Read [references/notion-schema.md](references/notion-schema.md) when discovering the workspace or Rows schema.
 
 ## Intent routing
 
@@ -64,7 +64,7 @@ The portable cross-agent interface is natural language. A single Agent Skill doe
 
 ## Operating rules
 
-- Preserve original source material in the Inbox database before transforming it.
+- Preserve original source material in the Rows database before transforming it.
 - Distinguish verified facts, user statements, source claims, assistant analysis, and hypotheses.
 - Attach provenance to material claims: source page, source date, URL or document reference when available.
 - Search for existing pages before creating new ones. Update canonical pages instead of creating near-duplicates.
@@ -73,7 +73,7 @@ The portable cross-agent interface is natural language. A single Agent Skill doe
 - Create links only when the relationship is useful and supported. Label inferred relationships as inferred; never present them as sourced facts.
 - Do not silently overwrite conflicting claims. Preserve both claims, their sources and dates, and flag the conflict.
 - Keep raw sources immutable after capture. Corrections belong in a note or a new source version.
-- Do not delete Inbox records or knowledge pages during normal ingestion or maintenance.
+- Do not delete Rows records or knowledge pages during normal ingestion or maintenance.
 - Use the smallest safe Notion edit. Fetch before editing; prefer targeted updates over replacing whole pages.
 - When a workflow cannot be completed because a tool is unavailable, report exactly which step is blocked. Do not pretend it was completed.
 
@@ -100,6 +100,6 @@ After an operation, briefly report:
 - which canonical pages were created or updated;
 - which native page links were added;
 - whether contradictions, duplicates, or missing evidence were found;
-- whether the Inbox record is Inbox, Processing, Processed, or Needs Review.
+- whether the Rows record is Pending, Processing, Processed, or Needs Review.
 
 Never report "bidirectional links verified" unless the agent actually checked the native mentions or backlinks.
