@@ -4,7 +4,7 @@
 
 **A portable Agent Skill for a shared Notion-backed LLM Wiki.**
 
-Capture material in the single shared Notion Inbox database, ask any connected agent to ingest it, and let the agent maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
+Capture material in the single shared Notion Rows database via the Inbox workspace, ask any connected agent to ingest it, and let the agent maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
 
 The intended daily experience stays simple:
 
@@ -29,7 +29,13 @@ WorkBuddy ───┘    and connects its own Notion MCP
                          │
                          ▼
                 Shared Notion Workspace
-                Inbox → Sources / Entities
+                Inbox workspace
+                         │
+                         ▼
+                    Rows database
+                         │
+                         ▼
+                Sources / Entities
                     → Concepts / Syntheses
 ~~~
 
@@ -37,7 +43,7 @@ WorkBuddy ───┘    and connects its own Notion MCP
 - **No custom MCP server is required.**
 - Each agent configures its own Notion MCP connection and authorizes the same workspace.
 - Each agent installs the same canonical Skill content; client-specific packaging is generated from the same source.
-- All agents read and write the same Notion pages and Inbox database.
+- All agents read and write the same Notion pages and Rows database. Users enter through the Inbox workspace.
 
 ## Install
 
@@ -77,7 +83,7 @@ Then connect that agent to Notion using the official remote MCP endpoint:
 https://mcp.notion.com/mcp
 ~~~
 
-Complete the agent-specific authorization and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox database, Inbox · 使用说明, Sources, Entities, Concepts, Syntheses, and System.
+Complete the agent-specific authorization and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox workspace, its nested Rows database, Sources, Entities, Concepts, Syntheses, and System.
 
 Client-specific MCP setup is intentionally outside this repository. See [docs/agent-setup.md](docs/agent-setup.md).
 
@@ -99,7 +105,8 @@ Natural language is the portable cross-agent interface. Some clients can add /in
 
 The Skill discovers the workspace by page titles; it does not hardcode private page IDs.
 
-- **Inbox** — one shared Notion database directly under Knowledge OS. Preserve source material before processing.
+- **Inbox** — the user-facing collection workspace and dashboard.
+- **Rows** — the single shared Notion database nested under Inbox. Preserve original source material in each row before processing.
 - **Sources** — source summaries, provenance, key claims, and evidence.
 - **Entities** — people, organizations, products, repositories, projects, and systems.
 - **Concepts** — reusable methods, technical principles, frameworks, and mental models.
@@ -127,7 +134,7 @@ The repository contains reusable instructions and optional legacy local-mode too
 
 ## Privacy boundary
 
-This is a public repository. Never commit original Inbox source material, personal wiki exports, private project documents, workspace-specific Notion IDs, OAuth tokens, API keys, cookies, or local sync state. Local raw/wiki/graph output is user data, not project source code.
+This is a public repository. Never commit original Rows source material, personal wiki exports, private project documents, workspace-specific Notion IDs, OAuth tokens, API keys, cookies, or local sync state. Local raw/wiki/graph output is user data, not project source code.
 
 The Skill never asks agents to upload personal knowledge into this GitHub repository. Each user keeps their knowledge in their own Notion workspace.
 
