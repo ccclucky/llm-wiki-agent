@@ -36,7 +36,7 @@ graph/
 **Requires:** [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or any agent that reads a config file.
 
 ```bash
-git clone https://github.com/SamurAIGPT/llm-wiki-agent.git
+git clone https://github.com/ccclucky/llm-wiki-agent.git
 cd llm-wiki-agent
 ```
 
@@ -215,6 +215,21 @@ The schema file tells the agent how to maintain the wiki — page formats, inges
 | No cross-references | Cross-references pre-built |
 | Contradictions surface at query time (maybe) | Flagged at ingest time |
 | No accumulation | Every source makes the wiki richer |
+
+
+## Notion Publishing (optional)
+
+This fork includes an incremental Markdown-to-Notion publisher. The first milestone keeps Git-tracked Markdown as the canonical source and publishes a browsable mirror into a Notion workspace.
+
+See [docs/notion-setup.md](docs/notion-setup.md) to create an internal Notion integration, share a root page with it, configure NOTION_API_KEY and NOTION_PARENT_PAGE_ID, and run the sync.
+
+~~~bash
+python tools/notion_sync.py --dry-run
+python tools/notion_sync.py --limit 3
+python tools/notion_sync.py
+~~~
+
+The publisher creates category pages, preserves resolvable [[wikilinks]] as Notion page links, skips unchanged pages, and only replaces blocks it previously created. It never automatically deletes remote pages. Bidirectional sync and Notion-as-canonical storage are future milestones, not current capabilities.
 
 ## Obsidian Integration
 

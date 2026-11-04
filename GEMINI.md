@@ -230,3 +230,10 @@ Covers: health summary, orphan nodes, god nodes, fragile bridges, phantom hubs. 
 - Link density budget: ≥2 outbound wikilinks before promotion
 - HG-WA-01: Graph layer MUST NOT auto-create pages from broken links
 - HG-WA-02: New commands MUST NOT duplicate existing command coverage
+
+
+## Optional Notion Publishing
+
+When the user has configured NOTION_API_KEY and NOTION_PARENT_PAGE_ID, publish wiki changes with python tools/notion_sync.py after a successful ingest or a saved synthesis. Use python tools/notion_sync.py --dry-run before the first publish. See docs/notion-setup.md for setup and safety details.
+
+The first milestone is one-way: Git-tracked Markdown is canonical and Notion is a mirror. Do not claim bidirectional sync. Do not edit mirrored Notion content directly; edit the Markdown source and publish again. Never read, print, commit, or expose the Notion token. The local .notion-sync-state.json is workspace-specific and must not be committed or shared.
