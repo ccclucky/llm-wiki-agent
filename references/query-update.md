@@ -12,7 +12,7 @@ When the user asks what the wiki knows about a subject:
 6. Answer with Notion page links/citations where the client supports them. Cite the underlying source page, not only a synthesis.
 7. Save a new Synthesis only when the user asks, or when the user explicitly asks to preserve the answer as knowledge.
 
-Do not query only Inbox by default. Inbox is the intake archive; the processed wiki pages are the knowledge layer.
+Do not query only Rows by default. Rows is the original-material archive; the processed wiki pages are the knowledge layer. Use the Inbox workspace to access Rows.
 
 ## Update an existing page
 
@@ -22,7 +22,7 @@ When the user supplies new information about an existing project, person, concep
 2. Fetch the page and inspect its current content before editing.
 3. Determine whether the new information adds a fact, changes a status, supersedes an old decision, or conflicts with existing evidence.
 4. Preserve the previous state when it is historically meaningful. Add dates and mark superseded information instead of silently rewriting history.
-5. Add provenance: link the relevant Inbox source or other source page using a native Notion mention.
+5. Add provenance: link the relevant Rows source or other source page using a native Notion mention.
 6. Update related Entity / Concept / Synthesis pages only when the new information materially affects them.
 7. Verify the edit and important backlinks.
 
