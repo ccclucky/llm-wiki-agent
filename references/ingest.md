@@ -6,10 +6,10 @@ The user experience must remain simple: provide material, say "ingest" or "/inge
 
 There are two supported intake patterns:
 
-- **Direct capture:** the user gives the material in chat or as a file/URL and asks to ingest it. Capture it into RAW, then process it.
-- **Manual RAW drop:** the user has already created a record in the Notion RAW database. Find that record and process it without creating another RAW entry.
+- **Direct capture:** the user gives the material in chat or as a file/URL and asks to ingest it. Capture it into Inbox, then process it.
+- **Manual Inbox drop:** the user has already created a record in the Notion Inbox database. Find that record and process it without creating another Inbox entry.
 
-If the user asks to "process the RAW inbox" or "ingest pending items", query records with Status = Inbox and process them sequentially. Respect records already marked Processing by another agent. Do not start an unbounded batch without reporting its scope.
+If the user asks to "process pending Inbox records" or "ingest pending items", query records with Status = Inbox and process them sequentially. Respect records already marked Processing by another agent. Do not start an unbounded batch without reporting its scope.
 
 
 Sources may be:
@@ -21,13 +21,13 @@ Sources may be:
 
 Use the source content actually available to the agent. Do not claim to have read an attachment or URL that was not accessible. For a URL, retrieve the page using an appropriate connected browser/search tool before ingesting it; preserve the URL as provenance.
 
-## 2. Capture into RAW first
+## 2. Capture into Inbox first
 
-1. Discover the shared RAW database using the workspace structure in [notion-schema.md](notion-schema.md).
+1. Discover the shared Inbox database using the workspace structure in [notion-schema.md](notion-schema.md).
 2. Fetch the data source schema before writing.
-3. Search RAW for a likely duplicate using source URL, title, and content fingerprint where available.
+3. Search Inbox for a likely duplicate using source URL, title, and content fingerprint where available.
 4. If the same source already exists, update or reference that record rather than creating a duplicate. If it was already Processed and the content is unchanged, report that it is already ingested.
-5. Create a RAW database page with:
+5. Create a Inbox database page with:
    - Name: concise source title;
    - Status: Inbox;
    - Source Type: the closest supported type;
@@ -35,20 +35,20 @@ Use the source content actually available to the agent. Do not claim to have rea
    - Captured By: current agent/client;
    - Tags: only useful tags;
    - Content Hash: optional stable fingerprint.
-6. Put the original source text in the RAW page body. For a file, attach it or include the extracted content; for a very large source, preserve the file/reference and a clear extraction note. Never silently truncate without saying so.
+6. Put the original source text in the Inbox page body. For a file, attach it or include the extracted content; for a very large source, preserve the file/reference and a clear extraction note. Never silently truncate without saying so.
 
 Do not start knowledge transformation before the original material is safely captured.
 
 ## 3. Claim the item
 
-Before processing, re-fetch the RAW record.
+Before processing, re-fetch the Inbox record.
 
 - If Status is Processed, check whether the content changed before reprocessing.
 - If Status is Processing and Processing By identifies another agent, do not process it concurrently. Report that another agent has claimed it.
 - If Status is Processing but the recorded start is clearly stale, inspect the record and its partial output. Only reclaim it after determining that the previous run is no longer active.
 - Set Status to Processing, Processing By to the current agent/client, Processing Started At to now, and clear stale Processing Notes.
 
-Notion does not provide a transaction or compare-and-swap lock through every MCP client. This status protocol reduces collisions but is not a perfect distributed lock. Avoid simultaneous ingest runs for the same RAW record.
+Notion does not provide a transaction or compare-and-swap lock through every MCP client. This status protocol reduces collisions but is not a perfect distributed lock. Avoid simultaneous ingest runs for the same Inbox record.
 
 ## 4. Understand the source against existing knowledge
 
@@ -124,13 +124,13 @@ For every important connection:
 
 One native mention creates the target page's backlink. Do not add redundant reciprocal mentions. The wiki graph is the network of canonical pages and their native mentions/backlinks.
 
-For RAW ingestion, also add a native mention from the RAW record to its resulting Source page (for example, an `Ingest Result` section), and keep the Source page's native mention back to the RAW record as provenance. These two directions serve different navigation purposes; this is intentional, not a rule to add reciprocal mentions for every relationship.
+For Inbox ingestion, also add a native mention from the Inbox record to its resulting Source page (for example, an `Ingest Result` section), and keep the Source page's native mention back to the Inbox record as provenance. These two directions serve different navigation purposes; this is intentional, not a rule to add reciprocal mentions for every relationship.
 
 Prefer a few high-value links over link spam. Do not link every repeated word.
 
 ## 7. Validate and complete
 
-Before marking the RAW record Processed:
+Before marking the Inbox record Processed:
 - verify the source page exists;
 - verify every created/updated page exists;
 - verify internal references resolve to real Notion pages;
@@ -139,14 +139,14 @@ Before marking the RAW record Processed:
 - verify important backlinks when the client supports it;
 - record contradictions or review requirements.
 
-Then update the RAW record:
+Then update the Inbox record:
 - Status: Processed if complete; otherwise Needs Review;
 - Processed At: current time if complete;
 - Ingest Summary: concise summary of what changed;
 - Processing By: current agent/client;
 - Processing Notes: warnings, unresolved items, or recovery details.
 
-Never delete the RAW record after successful ingestion.
+Never delete the Inbox record after successful ingestion.
 
 ## 8. User-facing result
 
