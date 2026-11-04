@@ -88,7 +88,7 @@ The Skill uses the connected Notion MCP. The user does not need to clone the rep
 ## Troubleshooting
 
 - **Skill loads but cannot find the workspace:** verify the Notion MCP account and page permissions.
-- **Workspace found but Rows database missing:** locate the exact Rows database directly under Knowledge OS; do not create a duplicate without checking with the user.
+- **Workspace found but Rows database missing:** locate the exact Rows database nested under the Inbox workspace; do not create a duplicate without checking with the user.
 - **Read works but write fails:** check whether the Notion MCP connection has edit access.
 - **Agent has no Notion MCP tools:** configure Notion MCP in that agent first. Do not fall back to local files and claim shared knowledge access.
 - **Backlinks cannot be inspected:** native page mentions still create Notion backlinks, but report verification as unavailable rather than claiming it was checked.
