@@ -1,0 +1,82 @@
+---
+name: cclucky-llm-wiki
+description: Use this skill to capture, ingest, query, update, lint, and map a Notion-backed personal knowledge wiki. Trigger whenever the user asks to save knowledge, ingest a source, remember a project decision, search prior knowledge, update a knowledge page, check contradictions, or inspect knowledge relationships.
+---
+
+# CCLUCKY LLM Wiki
+
+A shared, Notion-backed LLM Wiki. Preserve the simple workflow of the original Obsidian LLM Wiki:
+
+**Put material in RAW → run Ingest → the agent maintains the wiki.**
+
+This repository distributes the workflow as one portable Skill. It does not host a server, store user knowledge, manage Notion credentials, or configure an agent's MCP connection.
+
+## Non-negotiable architecture
+
+- **Notion is the canonical store.** All agents work against the same Notion workspace and the same RAW inbox.
+- **The connected Notion MCP is the transport.** Use the current agent's available Notion MCP tools. Tool names vary between clients; discover their capabilities rather than assuming exact names.
+- **This Skill is the workflow.** It defines how to capture, ingest, query, update, lint, and map knowledge.
+- **Do not use the repository's local raw/ or wiki/ folders as the default knowledge store.** They belong to the legacy local/Obsidian mode only.
+- **Do not require the user to clone this repository for daily use.** Install this Skill in each compatible agent and connect that agent to the same Notion workspace.
+- **Do not build or require a custom MCP server.** Each agent owner configures its own Notion MCP connection.
+- Never claim an operation succeeded until the Notion MCP confirms it.
+
+## Connection preflight
+
+Before the first operation in a session:
+
+1. Confirm that a Notion MCP connection is available and supports the required read/write operations.
+2. Search for the exact root page **CCLUCKY Knowledge OS**. Do not create another root page if it is missing; report an access or connection problem.
+3. Locate its **Inbox** child and the database **RAW · 原始资料收件箱** beneath Inbox.
+4. Fetch the RAW database/data-source schema before creating or updating database records.
+5. Locate the existing **Sources**, **Entities**, **Concepts**, **Syntheses**, and **System** sections under the root page.
+6. Read only the pages relevant to the current task. Do not load the entire workspace by default.
+
+If Notion MCP is not connected, explain that the user must connect Notion in this agent first. Do not silently fall back to local Markdown, another workspace, or a newly created knowledge base.
+
+Read [references/notion-schema.md](references/notion-schema.md) when discovering the workspace or RAW schema.
+
+## Intent routing
+
+| User intent | Workflow |
+|---|---|
+| "把这个放进知识库" / "ingest this" / "/ingest" | [Ingest](references/ingest.md) |
+| "查一下我之前记录的..." / "query the wiki" / "/query" | [Query and update](references/query-update.md) |
+| "更新项目知识" / "update the wiki" | [Query and update](references/query-update.md) |
+| "检查知识库" / "lint" / "/lint" | [Maintenance](references/maintenance.md) |
+| "查看知识关系" / "build graph" / "/graph" | [Maintenance](references/maintenance.md) |
+
+If the agent supports slash-command invocation, expose the short aliases /ingest, /query, /lint, and /graph. Otherwise, natural-language requests must trigger the same workflows.
+
+## Operating rules
+
+- Preserve original source material in RAW before transforming it.
+- Distinguish verified facts, user statements, source claims, assistant analysis, and hypotheses.
+- Attach provenance to material claims: source page, source date, URL or document reference when available.
+- Search for existing pages before creating new ones. Update canonical pages instead of creating near-duplicates.
+- Use Notion-native page mentions for internal wiki links. Plain text titles and ordinary URL hyperlinks do not create Notion backlinks.
+- A single native page mention creates an inbound backlink on the mentioned page. Do not add reciprocal mentions merely to simulate backlinks; add them only when both directions carry meaningful context.
+- Create links only when the relationship is useful and supported. Label inferred relationships as inferred; never present them as sourced facts.
+- Do not silently overwrite conflicting claims. Preserve both claims, their sources and dates, and flag the conflict.
+- Keep raw sources immutable after capture. Corrections belong in a note or a new source version.
+- Do not delete RAW records or knowledge pages during normal ingestion or maintenance.
+- Use the smallest safe Notion edit. Fetch before editing; prefer targeted updates over replacing whole pages.
+- When a workflow cannot be completed because a tool is unavailable, report exactly which step is blocked. Do not pretend it was completed.
+
+## Detailed workflows
+
+- Ingest: read [references/ingest.md](references/ingest.md).
+- Query and update: read [references/query-update.md](references/query-update.md).
+- Lint and graph: read [references/maintenance.md](references/maintenance.md).
+- Multi-agent safety and privacy: read [references/security-and-concurrency.md](references/security-and-concurrency.md).
+
+## Completion report
+
+After an operation, briefly report:
+- what source was captured or what question was answered;
+- which canonical pages were created or updated;
+- which native page links were added;
+- whether contradictions, duplicates, or missing evidence were found;
+- whether the RAW record is Inbox, Processing, Processed, or Needs Review.
+
+Never report "bidirectional links verified" unless the agent actually checked the native mentions or backlinks.
