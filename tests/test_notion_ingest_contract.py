@@ -11,7 +11,7 @@ def read(relative: str) -> str:
 
 
 class NotionIngestContractTests(unittest.TestCase):
-    def test_raw_statuses_match_the_shared_database_contract(self):
+    def test_inbox_statuses_match_the_shared_database_contract(self):
         schema = read("references/notion-schema.md")
         for status in ("Inbox", "Processing", "Processed", "Needs Review"):
             with self.subTest(status=status):
@@ -28,12 +28,12 @@ class NotionIngestContractTests(unittest.TestCase):
 
     def test_original_source_is_captured_before_processing(self):
         ingest = read("references/ingest.md")
-        capture = ingest.index("## 2. Capture into RAW first")
+        capture = ingest.index("## 2. Capture into Inbox first")
         claim = ingest.index("## 3. Claim the item")
         self.assertLess(capture, claim)
         self.assertIn("Status: Inbox", ingest)
         self.assertIn("Set Status to Processing", ingest)
-        self.assertIn("original source text in the RAW page body", ingest)
+        self.assertIn("original source text in the Inbox page body", ingest)
 
     def test_processed_requires_native_mentions_and_backlink_validation(self):
         ingest = read("references/ingest.md")
@@ -43,8 +43,8 @@ class NotionIngestContractTests(unittest.TestCase):
         self.assertIn("Notion-native page mention", ingest)
         self.assertIn("verify that the target page shows the new inbound reference", ingest)
         self.assertIn("Status: Processed if complete; otherwise Needs Review", ingest)
-        self.assertIn("Never delete the RAW record", ingest)
-        self.assertIn("RAW record to its resulting Source page", ingest)
+        self.assertIn("Never delete the Inbox record", ingest)
+        self.assertIn("Inbox record to its resulting Source page", ingest)
 
     def test_processing_fields_are_not_a_distributed_lock(self):
         ingest = read("references/ingest.md")
@@ -59,7 +59,7 @@ class NotionIngestContractTests(unittest.TestCase):
         self.assertTrue(guide.is_file())
         self.assertIn("notion-ingest-acceptance.md", readme)
         content = guide.read_text(encoding="utf-8")
-        for term in ("RAW", "Backlinks", "Claude Code", "Codex", "WorkBuddy"):
+        for term in ("Inbox", "Backlinks", "Claude Code", "Codex", "WorkBuddy"):
             with self.subTest(term=term):
                 self.assertIn(term.lower(), content.lower())
 
