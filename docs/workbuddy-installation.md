@@ -54,3 +54,10 @@ In a new WorkBuddy conversation, ask it to:
 Then run the [end-to-end acceptance checklist](notion-ingest-acceptance.md) using a real, non-sensitive source the user wants to preserve, or a test source explicitly approved by the user.
 
 A Skill being visible in WorkBuddy does not prove Notion MCP is connected. If read/write, native mention, or backlink operations are unavailable, record the exact limitation in the private LLM Wiki project page and do not claim full acceptance.
+
+
+## Official WorkBuddy references
+
+- [WorkBuddy Skills: import, storage, security checks](https://www.workbuddy.ai/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills)
+- [WorkBuddy Open Platform: Skill package structure and frontmatter](https://open.workbuddy.cn/en/docs/skill)
+- [WorkBuddy Open Platform: MCP + Skill and Connector formats](https://open.workbuddy.cn/docs/connector)
