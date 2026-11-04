@@ -20,13 +20,8 @@ env/
 !/raw/.gitkeep
 
 # Generated local wiki content: never commit
-/wiki/sources/*
-/wiki/entities/*
-/wiki/concepts/*
-/wiki/syntheses/*
-/wiki/log.md
-/wiki/lint-report.md
-/wiki/health-report.md
+/wiki/*
+!/wiki/.gitkeep
 
 # Generated graph data and visualizations
 /graph/*
