@@ -4,8 +4,8 @@ Usage: /wiki-ingest $ARGUMENTS
 
 Treat this as an alias for the Ingest workflow in SKILL.md and references/ingest.md.
 
-- $ARGUMENTS may be source text, a URL, an attachment, a local file explicitly supplied by the user, or an existing Inbox record.
-- Capture the source in the shared Notion database Inbox · 原始资料收件箱 first.
+- $ARGUMENTS may be source text, a URL, an attachment, a local file explicitly supplied by the user, or an existing Rows record.
+- Capture the source as a record in the shared Notion Rows database (accessed through the Inbox workspace) first.
 - Then process it into Sources, Entities, Concepts, and (when warranted) Syntheses.
 - Use Notion-native page mentions for internal links and validate backlinks when supported.
 - Do not use the repository's local raw/ or wiki/ folders unless the user explicitly requests legacy local/Obsidian mode.
