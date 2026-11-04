@@ -99,6 +99,7 @@ See:
 - [references/maintenance.md](references/maintenance.md) — lint and graph
 - [references/notion-schema.md](references/notion-schema.md) — workspace schema
 - [references/security-and-concurrency.md](references/security-and-concurrency.md) — privacy and multi-agent safety
+- [docs/notion-ingest-acceptance.md](docs/notion-ingest-acceptance.md) — end-to-end and cross-agent acceptance checklist
 
 ## What this fork contains
 
