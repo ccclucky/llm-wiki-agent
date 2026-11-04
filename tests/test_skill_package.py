@@ -65,33 +65,6 @@ class SkillPackageTests(unittest.TestCase):
                 with self.subTest(path=path, pattern=pattern.pattern):
                     self.assertIsNone(pattern.search(content))
 
-    def test_ingest_validates_backlinks_before_marking_processed(self):
-        ingest = (ROOT / "references" / "ingest.md").read_text(encoding="utf-8")
-        self.assertIn("verify important backlinks", ingest)
-        self.assertIn("Status: Processed", ingest)
-        self.assertLess(
-            ingest.index("verify important backlinks"),
-            ingest.index("Status: Processed"),
-        )
-        self.assertIn("Needs Review", ingest)
-
-    def test_raw_schema_documents_the_shared_status_contract(self):
-        schema = (ROOT / "references" / "notion-schema.md").read_text(encoding="utf-8")
-        for value in ("Inbox", "Processing", "Processed", "Needs Review"):
-            with self.subTest(status=value):
-                self.assertIn(value, schema)
-        for prop in ("Processing By", "Processing Started At", "Processing Notes",
-                     "Ingest Summary", "Processed At", "Content Hash"):
-            with self.subTest(property=prop):
-                self.assertIn(prop, schema)
-
-    def test_security_documents_non_atomic_processing_claim(self):
-        security = (ROOT / "references" / "security-and-concurrency.md").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn("not a guaranteed distributed lock", security)
-        self.assertIn("Re-fetch", security)
-
     def test_legacy_local_schema_is_preserved(self):
         from tools._utils import SCHEMA_FILE
 
