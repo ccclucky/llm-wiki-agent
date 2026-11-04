@@ -41,7 +41,19 @@ Other agents ┘    and connects its own Notion MCP
 
 ## Install
 
-Install the root Skill package from this repository using the agent's supported Agent Skills installer. If the agent has no Skill installer, copy **SKILL.md** and the **references/** directory into its supported skills directory.
+The current development branch can be installed with the Skills CLI:
+
+~~~bash
+npx skills add https://github.com/ccclucky/llm-wiki-agent/tree/feat/notion-first-agent-skill -g -a claude-code -a codex
+~~~
+
+After this branch is merged into main, the shorter command is:
+
+~~~bash
+npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
+~~~
+
+For another compatible agent, select it with the Skills CLI if supported, or copy **SKILL.md** and the **references/** directory into its supported skills directory.
 
 Then connect that agent to Notion using the official remote MCP endpoint:
 
