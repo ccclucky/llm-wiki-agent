@@ -59,7 +59,7 @@ The Skill does not configure MCP, manage OAuth, or share credentials between age
 
 Ask the agent to verify it can:
 - find CCLUCKY Knowledge OS;
-- read the Inbox database Inbox · 原始资料收件箱 and its schema;
+- read the Inbox · 原始资料收件箱 database and its schema;
 - create an Inbox record;
 - read and update pages under Sources, Entities, Concepts, Syntheses, and System;
 - create native Notion page mentions;
@@ -69,7 +69,7 @@ Exact MCP configuration steps differ by client and are intentionally not embedde
 
 ## 4. Run end-to-end acceptance
 
-Follow [the Notion Ingest acceptance checklist](notion-ingest-acceptance.md) independently in each client. Skill discovery alone is not enough: verify RAW writes, native mentions, backlinks, and status completion through that client's actual Notion MCP connection.
+Follow [the Notion Ingest acceptance checklist](notion-ingest-acceptance.md) independently in each client. Skill discovery alone is not enough: verify Inbox writes, native mentions, backlinks, and status completion through that client's actual Notion MCP connection.
 
 Use a real, non-sensitive source the user wants to preserve, or a test source the user has explicitly approved. Do not create throwaway personal-knowledge records merely to test the connection.
 
