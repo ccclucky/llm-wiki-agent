@@ -124,6 +124,8 @@ For every important connection:
 
 One native mention creates the target page's backlink. Do not add redundant reciprocal mentions. The wiki graph is the network of canonical pages and their native mentions/backlinks.
 
+For RAW ingestion, also add a native mention from the RAW record to its resulting Source page (for example, an `Ingest Result` section), and keep the Source page's native mention back to the RAW record as provenance. These two directions serve different navigation purposes; this is intentional, not a rule to add reciprocal mentions for every relationship.
+
 Prefer a few high-value links over link spam. Do not link every repeated word.
 
 ## 7. Validate and complete
