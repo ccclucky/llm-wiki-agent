@@ -45,7 +45,7 @@ Exact MCP configuration steps differ by client and are intentionally not embedde
 
 ## No repository clone required
 
-After installation, normal use is conversational:
+The portable entrypoint across clients is natural language. A single Skill does not guarantee native /ingest or /query slash commands; those aliases are client-specific. After installation, normal use is conversational:
 - "把这篇文章沉淀到我的知识库"
 - "查询我之前记录的某个技术主题"
 - "更新某个项目的知识"
