@@ -14,7 +14,7 @@ Check:
 6. **Stale pages:** canonical pages not updated despite newer authoritative source material.
 7. **Missing knowledge pages:** a durable entity or concept appears repeatedly but has no canonical page.
 8. **Thin hubs:** highly connected pages with too little explanatory content.
-9. **Unprocessed RAW:** records left in Inbox or Processing for too long, including stale Processing claims.
+9. **Unprocessed Inbox records:** records left in Inbox or Processing for too long, including stale Processing claims.
 
 Do not equate low link count with bad quality. Some source pages are naturally leaves; some concepts are hubs. Report context, not just counts.
 
