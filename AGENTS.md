@@ -7,7 +7,7 @@ Before any knowledge-base task, read [SKILL.md](SKILL.md) and the relevant file 
 ## Default behavior
 
 - Use the connected Notion MCP and the user's shared Notion workspace.
-- Follow the Inbox → Ingest → Sources / Entities / Concepts / Syntheses workflow.
+- Use the Inbox workspace to capture material in Rows, then follow Rows → Ingest → Sources / Entities / Concepts / Syntheses.
 - Use native Notion page mentions for internal links so Notion can create backlinks.
 - Treat Notion as the canonical knowledge store.
 - Do not read or write local raw/ or wiki/ as the default workflow.
