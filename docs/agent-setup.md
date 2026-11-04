@@ -47,8 +47,8 @@ Exact MCP configuration steps differ by client and are intentionally not embedde
 
 After installation, normal use is conversational:
 - "把这篇文章沉淀到我的知识库"
-- "查询我之前关于 Agent Eval 的记录"
-- "更新 Maintainer 项目的知识"
+- "查询我之前记录的某个技术主题"
+- "更新某个项目的知识"
 - "检查知识库里的孤立页面和矛盾"
 
 The Skill uses the connected Notion MCP. The user does not need to clone the repository, maintain local Markdown files, or create a separate RAW inbox for each agent.
