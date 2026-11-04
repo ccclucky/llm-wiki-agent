@@ -43,6 +43,14 @@ Ask the agent to verify it can:
 
 Exact MCP configuration steps differ by client and are intentionally not embedded here. This project does not manage client-specific MCP settings or credentials.
 
+### 4. Run end-to-end acceptance
+
+Follow [the Notion Ingest acceptance checklist](notion-ingest-acceptance.md) independently in each client. Skill discovery alone is not enough: verify RAW writes, native mentions, backlinks, and status completion through that client's actual Notion MCP connection.
+
+Use a real, non-sensitive source the user wants to preserve, or a test source the user has explicitly approved. Do not create throwaway personal-knowledge records merely to test the connection.
+
+Record per-client results in the private LLM Wiki project page in Notion. Do not commit workspace-specific page IDs, private source content, or client acceptance results to this public repository.
+
 ## No repository clone required
 
 The portable entrypoint across clients is natural language. A single Skill does not guarantee native /ingest or /query slash commands; those aliases are client-specific. After installation, normal use is conversational:
