@@ -72,7 +72,7 @@ Once the Skill and Notion MCP are connected, use natural language:
 | Intent | Example |
 |---|---|
 | Ingest | "把这篇文章沉淀到我的知识库" |
-| Query | "结合我之前记录的 Maintainer 项目经验，分析 Agent Eval" |
+| Query | "结合知识库中已有的项目经验，分析一个技术方案" |
 | Update | "把刚才确定的项目决策同步到知识库" |
 | Lint | "检查知识库里的孤立页面、重复页面和矛盾" |
 | Graph | "梳理 Agent、项目和技术概念之间的关系" |
