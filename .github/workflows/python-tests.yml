@@ -1,0 +1,28 @@
+name: Python tests
+
+on:
+  push:
+    branches: ["main", "feat/**"]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Python files
+        run: python -m compileall -q tools tests scripts
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Build WorkBuddy Skill package
+        run: python scripts/package_workbuddy_skill.py --output "$RUNNER_TEMP/cclucky-llm-wiki-workbuddy.zip"
+      - name: Upload WorkBuddy Skill package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cclucky-llm-wiki-workbuddy
+          path: ${{ runner.temp }}/cclucky-llm-wiki-workbuddy.zip
+          if-no-files-found: error
+          retention-days: 14

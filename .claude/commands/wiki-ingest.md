@@ -1,18 +1,12 @@
-Ingest a source document into the LLM Wiki.
+Ingest source material into the shared Notion-backed CCLUCKY LLM Wiki.
 
 Usage: /wiki-ingest $ARGUMENTS
 
-$ARGUMENTS should be the path to a file in raw/, e.g. `raw/articles/my-article.md`
+Treat this as an alias for the Ingest workflow in SKILL.md and references/ingest.md.
 
-Follow the Ingest Workflow defined in CLAUDE.md exactly:
-1. Read the source file at the given path
-2. Read wiki/index.md and wiki/overview.md for current context
-3. Write wiki/sources/<slug>.md (source page format per CLAUDE.md)
-4. Update wiki/index.md — add the new entry under Sources
-5. Update wiki/overview.md — revise synthesis if warranted
-6. Create/update entity pages (wiki/entities/) for key people, companies, projects
-7. Create/update concept pages (wiki/concepts/) for key ideas and frameworks
-8. Flag any contradictions with existing wiki content
-9. Append to wiki/log.md: ## [today's date] ingest | <Title>
-
-After completing all writes, summarize: what was added, which pages were created or updated, and any contradictions found.
+- $ARGUMENTS may be source text, a URL, an attachment, a local file explicitly supplied by the user, or an existing Rows record.
+- Capture the source as a record in the shared Notion Rows database (accessed through the Inbox workspace) first.
+- Then process it into Sources, Entities, Concepts, and (when warranted) Syntheses.
+- Use Notion-native page mentions for internal links and validate backlinks when supported.
+- Do not use the repository's local raw/ or wiki/ folders unless the user explicitly requests legacy local/Obsidian mode.
+- If Notion MCP is unavailable, ask the user to connect it; do not claim completion.

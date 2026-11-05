@@ -1,14 +1,12 @@
-Query the LLM Wiki and synthesize an answer.
+Query the shared Notion-backed CCLUCKY LLM Wiki.
 
 Usage: /wiki-query $ARGUMENTS
 
-$ARGUMENTS is the question to answer, e.g. `What are the main themes across all sources?`
+Follow SKILL.md and references/query-update.md:
+1. Search the canonical Notion workspace for relevant Entities, Concepts, Sources, and Syntheses.
+2. Read source evidence and follow native page mentions/backlinks where useful.
+3. Distinguish verified facts, user statements, source claims, analysis, and hypotheses.
+4. Answer with traceable Notion page references.
+5. Save a new Synthesis only when the user asks.
 
-Follow the Query Workflow defined in CLAUDE.md:
-1. Read wiki/index.md to identify the most relevant pages
-2. Read those pages (up to ~10 most relevant)
-3. Synthesize a thorough markdown answer with [[PageName]] wikilink citations
-4. Include a ## Sources section at the end listing pages you drew from
-5. Ask the user if they want the answer saved as wiki/syntheses/<slug>.md
-
-If the wiki is empty, say so and suggest running /wiki-ingest first.
+Do not query local wiki/ files as a fallback for shared Notion access.

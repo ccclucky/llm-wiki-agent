@@ -22,7 +22,7 @@ INDEX_FILE = WIKI_DIR / "index.md"
 LOG_FILE = WIKI_DIR / "log.md"
 OVERVIEW_FILE = WIKI_DIR / "overview.md"
 GRAPH_DIR = REPO_ROOT / "graph"
-SCHEMA_FILE = REPO_ROOT / "CLAUDE.md"
+SCHEMA_FILE = REPO_ROOT / "legacy" / "LOCAL_WIKI_SCHEMA.md"
 
 # Default metadata files to exclude from wiki page listings.
 _META_EXCLUDE = {"index.md", "log.md", "lint-report.md"}
