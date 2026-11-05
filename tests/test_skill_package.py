@@ -116,7 +116,7 @@ class SkillPackageTests(unittest.TestCase):
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         self.assertIn("https://mcp.notion.com/mcp", skill)
         self.assertIn("agent host", skill.lower())
-        self.assertIn("does not start", skill.lower())
+        self.assertIn("start, install", skill.lower())
         self.assertIn("does not configure", skill.lower())
 
     def test_legacy_local_runtime_has_been_removed(self):
