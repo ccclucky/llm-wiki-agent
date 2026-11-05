@@ -38,7 +38,7 @@ The default connection is Notion's official remote MCP endpoint:
 https://mcp.notion.com/mcp
 ~~~
 
-The user connects this endpoint in each agent's normal MCP settings. The Skill does not start, install, configure, authorize, or manage the MCP server. Do not ask the user for a Notion token, start a local stdio process, or silently fall back to direct Notion API calls.
+The user connects this endpoint in each agent's normal MCP settings. The Skill does not configure, start, install, authorize, or manage the MCP server. Do not ask the user for a Notion token, start a local stdio process, or silently fall back to direct Notion API calls.
 
 Do not require the user to clone this repository for daily use. Install the same Skill in each compatible agent and connect each agent to the user's Notion workspace.
 

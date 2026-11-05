@@ -90,7 +90,7 @@ Use the agent's remote MCP connection settings, complete Notion authorization, a
 
 This is a remote MCP connection; normally the agent connects to the endpoint rather than launching a local stdio server. Exact setup and authorization steps are client-specific. This repository does not configure MCP, manage OAuth, or share credentials between agents.
 
-See [docs/agent-setup.md](docs/agent-setup.md).
+See [docs/agent-setup.md](docs/agent-setup.md) and the [end-to-end acceptance checklist](docs/notion-ingest-acceptance.md).
 
 ## Use
 

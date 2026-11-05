@@ -128,6 +128,7 @@ class SkillPackageTests(unittest.TestCase):
             ROOT / "graph",
             ROOT / "pyproject.toml",
             ROOT / "requirements.txt",
+            ROOT / "docs" / "notion-setup.md",
         ):
             with self.subTest(path=path):
                 self.assertFalse(path.exists())
