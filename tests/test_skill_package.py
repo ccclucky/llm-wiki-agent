@@ -8,27 +8,25 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+PACKAGE_ROOT = "cclucky-llm-wiki"
+
+
+def runtime_markdown_files():
+    return sorted((ROOT / "references").rglob("*.md"))
 
 
 def public_markdown_files():
-    """Return public-facing Markdown docs, including nested references and examples."""
-    fixed = [
-        ROOT / "README.md",
-        ROOT / "AGENTS.md",
-        ROOT / "CLAUDE.md",
-        ROOT / "GEMINI.md",
-        ROOT / "SKILL.md",
-    ]
+    fixed = [ROOT / "README.md", ROOT / "AGENTS.md", ROOT / "SKILL.md"]
     discovered = []
-    for directory in ("docs", "references", "examples", "legacy"):
-        root = ROOT / directory
-        if root.exists():
-            discovered.extend(root.rglob("*.md"))
+    docs = ROOT / "docs"
+    if docs.exists():
+        discovered.extend(docs.rglob("*.md"))
+    discovered.extend(runtime_markdown_files())
     return sorted({path for path in [*fixed, *discovered] if path.is_file()})
 
 
 class SkillPackageTests(unittest.TestCase):
-    def test_skill_frontmatter_has_required_fields(self):
+    def test_skill_frontmatter_has_standard_required_fields(self):
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         self.assertTrue(skill.startswith("---\n"))
         frontmatter = skill.split("---", 2)[1]
@@ -49,7 +47,7 @@ class SkillPackageTests(unittest.TestCase):
             with self.subTest(field=field):
                 self.assertRegex(frontmatter, rf"(?m)^{field}: .+")
 
-    def test_referenced_workflow_files_exist(self):
+    def test_all_skill_references_exist(self):
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         references = re.findall(r"\]\((references/[^)]+)\)", skill)
         references.extend(
@@ -61,7 +59,7 @@ class SkillPackageTests(unittest.TestCase):
             with self.subTest(reference=reference):
                 self.assertTrue((ROOT / reference).is_file())
 
-    def test_workbuddy_package_contains_skill_and_all_references(self):
+    def test_workbuddy_package_contains_only_runtime_skill_files(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "cclucky-llm-wiki-workbuddy.zip"
             subprocess.run(
@@ -78,13 +76,15 @@ class SkillPackageTests(unittest.TestCase):
             )
             with zipfile.ZipFile(output) as archive:
                 names = set(archive.namelist())
-            self.assertIn("cclucky-llm-wiki/SKILL.md", names)
-            for reference in sorted((ROOT / "references").rglob("*.md")):
-                archive_path = (
-                    "cclucky-llm-wiki/" + reference.relative_to(ROOT).as_posix()
-                )
-                with self.subTest(reference=archive_path):
-                    self.assertIn(archive_path, names)
+
+            expected = {
+                f"{PACKAGE_ROOT}/SKILL.md",
+                *{
+                    f"{PACKAGE_ROOT}/references/{path.relative_to(ROOT / 'references').as_posix()}"
+                    for path in runtime_markdown_files()
+                },
+            }
+            self.assertEqual(names, expected)
 
     def test_public_docs_contain_no_workspace_ids_or_secrets(self):
         workspace_id_patterns = [
@@ -112,17 +112,32 @@ class SkillPackageTests(unittest.TestCase):
                 with self.subTest(path=path, pattern=pattern.pattern):
                     self.assertIsNone(pattern.search(content))
 
-    def test_legacy_local_schema_is_preserved(self):
-        from tools._utils import SCHEMA_FILE
+    def test_skill_declares_host_managed_remote_notion_mcp(self):
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("https://mcp.notion.com/mcp", skill)
+        self.assertIn("agent host", skill.lower())
+        self.assertIn("does not start", skill.lower())
+        self.assertIn("does not configure", skill.lower())
 
-        self.assertTrue(SCHEMA_FILE.is_file())
+    def test_legacy_local_runtime_has_been_removed(self):
+        for path in (
+            ROOT / "tools",
+            ROOT / "legacy",
+            ROOT / "raw",
+            ROOT / "wiki",
+            ROOT / "graph",
+            ROOT / "pyproject.toml",
+            ROOT / "requirements.txt",
+        ):
+            with self.subTest(path=path):
+                self.assertFalse(path.exists())
 
-    def test_local_user_data_is_ignored(self):
+    def test_gitignore_covers_only_local_build_and_secret_artifacts(self):
         gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
-        self.assertIn("/raw/*", gitignore)
-        self.assertIn("/wiki/*", gitignore)
-        self.assertIn("/graph/*", gitignore)
+        self.assertIn(".env", gitignore)
         self.assertIn("/dist/", gitignore)
+        self.assertNotIn("/raw/*", gitignore)
+        self.assertNotIn("/wiki/*", gitignore)
 
 
 if __name__ == "__main__":

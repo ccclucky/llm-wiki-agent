@@ -1,58 +1,58 @@
 # CCLUCKY LLM Wiki
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+**A portable Agent Skill for a Notion-backed personal knowledge base.**
 
-**A portable Agent Skill for a shared Notion-backed LLM Wiki.**
+Capture material in Notion's Rows database through the Inbox workbench, ask any connected agent to ingest it, and let the agent maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
 
-Capture material in the user's own Notion Rows database via the Inbox workspace, then let any of that user's connected agents ingest it and maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
-
-The intended daily experience stays simple:
+The daily experience stays simple:
 
 ~~~text
 把这篇文章沉淀到我的知识库
-/ingest
 ~~~
 
-The Skill is the workflow. Notion MCP is the connection. Notion is the canonical knowledge store.
+**The Skill is the workflow. The agent host owns the MCP connection. Notion is the canonical knowledge store.**
 
-## Final usage model
+## Architecture
 
 ~~~text
 Claude Code ─┐
-Codex ───────┼── each agent installs this Skill
-WorkBuddy ───┘    and connects its own Notion MCP
-                         │
-                         ▼
-                CCLUCKY LLM Wiki Skill
-                ingest / query / update
-                lint / graph
-                         │
-                         ▼
-                User's own Notion Workspace
-                shared by that user's agents
-                         │
-                         ▼
-                    Inbox workspace
-                         │
-                         ▼
-                    Rows database
-                         │
-                         ▼
-                Sources / Entities
-                    → Concepts / Syntheses
+Codex ───────┼── install the same CCLUCKY LLM Wiki Skill
+WorkBuddy ───┘                 │
+                               ▼
+                     Agent's Notion MCP connection
+                     configured by the user
+                               │
+                               ▼
+                      User's Notion workspace
+                      shared by that user's agents
+                               │
+                 ┌─────────────┴─────────────┐
+                 ▼                           ▼
+             Inbox workbench             Knowledge areas
+                 │                  Sources / Entities
+                 ▼                  Concepts / Syntheses
+             Rows database                 System
 ~~~
 
-- **No repository clone is required for daily use.**
-- **No custom MCP server is required.**
-- Each user connects their own agents to their own Notion workspace; agents belonging to the same user share that workspace.
-- Each agent installs the same canonical Skill content; client-specific packaging is generated from the same source.
-- The repository does not provide a shared hosted workspace. Users retain ownership and control of their own Notion data.
+### Responsibility boundaries
+
+| Component | Responsibility |
+|---|---|
+| This repository | Portable Skill instructions, workflow references, and a small WorkBuddy packaging script |
+| Agent host | Install the Skill; configure and authorize its own Notion MCP connection |
+| Notion MCP | Expose Notion search, read, write, and page-linking operations to the agent |
+| Notion workspace | Store the user's original material and maintained knowledge |
+
+- No repository clone is required for daily use.
+- No custom MCP server, local backend, database, or OAuth implementation is required.
+- Each agent connects independently to the same user's Notion workspace.
+- The repository never stores the user's knowledge, workspace IDs, or credentials.
 
 ## Install
 
 ### Claude Code and Codex
 
-Install the Skill from the public repository's main branch:
+Install the Skill from the public repository:
 
 ~~~bash
 npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
@@ -60,13 +60,17 @@ npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
 
 ### WorkBuddy
 
-WorkBuddy imports a local Skill package through its UI. Build the package:
+WorkBuddy imports a local Skill package through its UI. Build the package from a clone of this repository:
 
 ~~~bash
 python scripts/package_workbuddy_skill.py
 ~~~
 
-Then open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill** and upload `dist/cclucky-llm-wiki-workbuddy.zip`.
+Then open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill** and upload:
+
+~~~text
+dist/cclucky-llm-wiki-workbuddy.zip
+~~~
 
 See [docs/workbuddy-installation.md](docs/workbuddy-installation.md) for details.
 
@@ -74,15 +78,19 @@ See [docs/workbuddy-installation.md](docs/workbuddy-installation.md) for details
 
 Use the client's documented Skill installation method. If the client is not supported by the Skills CLI, copy **SKILL.md** and **references/** into its supported skills directory.
 
-Then connect that agent to Notion using the official remote MCP endpoint:
+## Connect Notion MCP
+
+Configure Notion MCP separately in every agent/client. The default supported endpoint is Notion's official remote MCP service:
 
 ~~~text
 https://mcp.notion.com/mcp
 ~~~
 
-Complete the agent-specific authorization and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox workspace, its nested Rows database, Sources, Entities, Concepts, Syntheses, and System.
+Use the agent's remote MCP connection settings, complete Notion authorization, and grant access to the **CCLUCKY Knowledge OS** root page and its Inbox, Rows, Sources, Entities, Concepts, Syntheses, and System areas.
 
-Client-specific MCP setup is intentionally outside this repository. See [docs/agent-setup.md](docs/agent-setup.md).
+This is a remote MCP connection; normally the agent connects to the endpoint rather than launching a local stdio server. Exact setup and authorization steps are client-specific. This repository does not configure MCP, manage OAuth, or share credentials between agents.
+
+See [docs/agent-setup.md](docs/agent-setup.md).
 
 ## Use
 
@@ -90,19 +98,19 @@ Once the Skill and Notion MCP are connected, use natural language:
 
 | Intent | Example |
 |---|---|
-| Ingest | "把这篇文章沉淀到我的知识库" |
-| Query | "结合知识库中已有的项目经验，分析一个技术方案" |
-| Update | "把刚才确定的项目决策同步到知识库" |
-| Lint | "检查知识库里的孤立页面、重复页面和矛盾" |
-| Graph | "梳理 Agent、项目和技术概念之间的关系" |
+| Ingest | 把这篇文章沉淀到我的知识库 |
+| Query | 结合知识库中已有的项目经验，分析一个技术方案 |
+| Update | 把刚才确定的项目决策同步到知识库 |
+| Lint | 检查知识库里的孤立页面、重复页面和矛盾 |
+| Graph | 梳理 Agent、项目和技术概念之间的关系 |
 
-Natural language is the portable cross-agent interface. Some clients can add /ingest, /query, /lint, and /graph aliases, but installing one Skill does not register those slash commands in every client.
+Natural language is the portable cross-agent interface. A Skill does not automatically register native slash commands in every client.
 
 ## Knowledge model
 
-The Skill discovers the workspace by page titles; it does not hardcode private page IDs.
+The Skill discovers the workspace by page titles; it never hardcodes private page IDs.
 
-- **Inbox** — the user-facing collection workspace and dashboard.
+- **Inbox** — the user-facing workbench and collection dashboard.
 - **Rows** — the single shared Notion database nested under Inbox. Preserve original source material in each row before processing.
 - **Sources** — source summaries, provenance, key claims, and evidence.
 - **Entities** — people, organizations, products, repositories, projects, and systems.
@@ -110,30 +118,36 @@ The Skill discovers the workspace by page titles; it does not hardcode private p
 - **Syntheses** — conclusions and comparisons built from multiple sources.
 - **System** — operating rules, navigation, architecture decisions, and maintenance notes.
 
-Internal relationships must use Notion-native page mentions. A native mention creates a backlink on the mentioned page. Plain text titles and ordinary URL hyperlinks are not a substitute.
+Internal relationships use Notion-native page mentions. A native mention creates a backlink on the mentioned page; plain text titles and ordinary URL hyperlinks are not substitutes.
 
-See:
-- [SKILL.md](SKILL.md) — main Skill instructions
-- [references/ingest.md](references/ingest.md) — capture and ingest workflow
-- [references/query-update.md](references/query-update.md) — query and update workflow
-- [references/maintenance.md](references/maintenance.md) — lint and graph
-- [references/notion-schema.md](references/notion-schema.md) — workspace schema
-- [references/security-and-concurrency.md](references/security-and-concurrency.md) — privacy and multi-agent safety
-- [docs/notion-ingest-acceptance.md](docs/notion-ingest-acceptance.md) — end-to-end and cross-agent acceptance checklist
+See [SKILL.md](SKILL.md) and the detailed [workflow references](references/).
 
-## What this fork contains
+## Repository contents
 
-The repository contains reusable instructions and optional legacy local-mode tooling. It does **not** contain user knowledge, Notion credentials, workspace IDs, or a hosted service.
+~~~text
+SKILL.md                         # Portable Agent Skill entrypoint
+references/                      # Ingest, query/update, maintenance, schema, safety
+scripts/package_workbuddy_skill.py
+docs/                             # Agent setup, WorkBuddy install, acceptance checklist
+tests/                            # Contract and package tests
+~~~
 
-- **Primary:** Notion-first Agent Skill in SKILL.md and references/.
-- **Legacy local/Obsidian mode:** existing Python tools under tools/ can still process local Markdown files when explicitly requested. It is not the default shared multi-agent workflow.
-- **Legacy Notion publisher:** tools/notion_sync.py mirrors local Markdown to Notion in one direction. It is not used by the Notion-first Skill and does not provide bidirectional sync. See [docs/legacy-notion-publisher.md](docs/legacy-notion-publisher.md).
+The runtime Skill consists of **SKILL.md + references/**. The docs explain installation and acceptance; the script only packages those runtime files for WorkBuddy.
+
+## Validate locally
+
+~~~bash
+python -m unittest discover -s tests -v
+python scripts/package_workbuddy_skill.py
+~~~
+
+No third-party Python dependencies are required.
 
 ## Privacy boundary
 
-This is a public repository. Never commit original Rows source material, personal wiki exports, private project documents, workspace-specific Notion IDs, OAuth tokens, API keys, cookies, or local sync state. Local raw/wiki/graph output is user data, not project source code.
+This is a public repository containing reusable instructions and packaging code only. Never commit original Rows source material, personal wiki exports, private project documents, workspace-specific Notion IDs, OAuth tokens, API keys, cookies, or local state.
 
-The Skill never asks agents to upload personal knowledge into this GitHub repository. Each user keeps their knowledge in their own Notion workspace.
+The Skill never asks agents to upload personal knowledge into this GitHub repository. Each user retains ownership and control of their own Notion workspace.
 
 ## License
 
