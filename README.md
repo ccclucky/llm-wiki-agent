@@ -4,7 +4,7 @@
 
 **A portable Agent Skill for a shared Notion-backed LLM Wiki.**
 
-Capture material in the single shared Notion Rows database via the Inbox workspace, ask any connected agent to ingest it, and let the agent maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
+Capture material in the user's own Notion Rows database via the Inbox workspace, then let any of that user's connected agents ingest it and maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
 
 The intended daily experience stays simple:
 
@@ -28,8 +28,11 @@ WorkBuddy ───┘    and connects its own Notion MCP
                 lint / graph
                          │
                          ▼
-                Shared Notion Workspace
-                Inbox workspace
+                User's own Notion Workspace
+                shared by that user's agents
+                         │
+                         ▼
+                    Inbox workspace
                          │
                          ▼
                     Rows database
@@ -41,21 +44,15 @@ WorkBuddy ───┘    and connects its own Notion MCP
 
 - **No repository clone is required for daily use.**
 - **No custom MCP server is required.**
-- Each agent configures its own Notion MCP connection and authorizes the same workspace.
+- Each user connects their own agents to their own Notion workspace; agents belonging to the same user share that workspace.
 - Each agent installs the same canonical Skill content; client-specific packaging is generated from the same source.
-- All agents read and write the same Notion pages and Rows database. Users enter through the Inbox workspace.
+- The repository does not provide a shared hosted workspace. Users retain ownership and control of their own Notion data.
 
 ## Install
 
 ### Claude Code and Codex
 
-The current development branch can be installed with the Skills CLI:
-
-~~~bash
-npx skills add https://github.com/ccclucky/llm-wiki-agent/tree/feat/notion-first-agent-skill -g -a claude-code -a codex
-~~~
-
-After this branch is merged into main, the shorter command is:
+Install the Skill from the public repository's main branch:
 
 ~~~bash
 npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
@@ -126,7 +123,7 @@ See:
 
 ## What this fork contains
 
-The repository contains reusable instructions and optional legacy local-mode tooling. It does **not** contain the user's private knowledge, Notion credentials, workspace IDs, or a hosted service.
+The repository contains reusable instructions and optional legacy local-mode tooling. It does **not** contain user knowledge, Notion credentials, workspace IDs, or a hosted service.
 
 - **Primary:** Notion-first Agent Skill in SKILL.md and references/.
 - **Legacy local/Obsidian mode:** existing Python tools under tools/ can still process local Markdown files when explicitly requested. It is not the default shared multi-agent workflow.
