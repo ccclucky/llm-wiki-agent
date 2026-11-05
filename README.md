@@ -1,58 +1,93 @@
 # CCLUCKY LLM Wiki
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+**A portable Agent Skill for a personal knowledge base powered by Notion.**
 
-**A portable Agent Skill for a shared Notion-backed LLM Wiki.**
+Use the same knowledge-management workflow from different AI agents. Each agent connects to the same Notion workspace through its own Notion MCP connection; the Skill tells the agent how to capture, organize, retrieve, and maintain knowledge.
 
-Capture material in the user's own Notion Rows database via the Inbox workspace, then let any of that user's connected agents ingest it and maintain Sources, Entities, Concepts, Syntheses, and native Notion backlinks.
+> **The Skill is the workflow. Notion is the source of truth. The agent host owns the MCP connection.**
 
-The intended daily experience stays simple:
+## Quick start
+
+You need both the Skill and a working Notion MCP connection.
+
+1. **Install the Skill** in each agent you want to use.
+2. **Connect Notion MCP** separately in each agent and authorize access to the existing **CCLUCKY Knowledge OS** page.
+3. Start a conversation and ask naturally, for example: `把这篇文章沉淀到我的知识库`.
+
+No repository clone is needed for normal daily use. WorkBuddy users only need a clone when building the uploadable ZIP package locally.
+
+## How it works
 
 ~~~text
-把这篇文章沉淀到我的知识库
-/ingest
+                         One shared Notion workspace
+                                      ▲
+                                      │
+        ┌─────────────────────────────┼────────────────────────────┐
+        │                             │                            │
+   Claude Code                     Codex                       WorkBuddy
+        │                             │                            │
+   CCLUCKY Skill                 CCLUCKY Skill                CCLUCKY Skill
+        │                             │                            │
+   Notion MCP                    Notion MCP                   Notion MCP
+   (authorized                  (authorized                  (authorized
+    by this agent)                by this agent)                by this agent)
+        └─────────────────────────────┼────────────────────────────┘
+                                      │
+                           CCLUCKY Knowledge OS
+                                      │
+                 ┌────────────────────┴────────────────────┐
+                 │                                         │
+             Inbox / Rows                         Knowledge areas
+          Original material intake          Sources / Entities / Concepts
+                                            Syntheses / System
 ~~~
 
-The Skill is the workflow. Notion MCP is the connection. Notion is the canonical knowledge store.
+### Ingestion flow
 
-## Final usage model
+There are two ways to submit material:
+
+- **Direct capture:** give an agent text, a file, a URL, a research note, or a decision and ask it to ingest the material. The agent first preserves the original material in **Inbox → Rows**, then processes it.
+- **Manual intake:** add a record to the **Rows** database yourself. Ask an agent to ingest it or process pending records.
+
+The agent checks for duplicates, reads relevant existing knowledge, creates or updates canonical pages, adds Notion-native page mentions, verifies the result where the connected MCP supports it, and updates the Rows status.
 
 ~~~text
-Claude Code ─┐
-Codex ───────┼── each agent installs this Skill
-WorkBuddy ───┘    and connects its own Notion MCP
-                         │
-                         ▼
-                CCLUCKY LLM Wiki Skill
-                ingest / query / update
-                lint / graph
-                         │
-                         ▼
-                User's own Notion Workspace
-                shared by that user's agents
-                         │
-                         ▼
-                    Inbox workspace
-                         │
-                         ▼
-                    Rows database
-                         │
-                         ▼
-                Sources / Entities
-                    → Concepts / Syntheses
+Material ──► Inbox / Rows ──► Ingest ──► Sources / Entities / Concepts
+                                  │                    │
+                                  └── status & summary └── native mentions
+                                                          and backlinks
 ~~~
 
-- **No repository clone is required for daily use.**
-- **No custom MCP server is required.**
-- Each user connects their own agents to their own Notion workspace; agents belonging to the same user share that workspace.
-- Each agent installs the same canonical Skill content; client-specific packaging is generated from the same source.
-- The repository does not provide a shared hosted workspace. Users retain ownership and control of their own Notion data.
+## Knowledge model
 
-## Install
+The Skill discovers the existing workspace by page title. It does not hardcode private Notion page or database IDs.
+
+| Area | Purpose |
+|---|---|
+| **Inbox** | User-facing collection workbench |
+| **Rows** | Canonical intake database; preserves original material and processing status |
+| **Sources** | Source summaries, provenance, evidence, and claims |
+| **Entities** | People, organizations, products, projects, repositories, and systems |
+| **Concepts** | Reusable methods, technical principles, frameworks, and mental models |
+| **Syntheses** | Conclusions and comparisons supported by multiple sources |
+| **System** | Operating rules, navigation, architecture decisions, and maintenance notes |
+
+Internal wiki relationships use **Notion-native page mentions**. A native mention creates an inbound backlink on the mentioned page; plain-text titles and ordinary URL links are not equivalent. The Skill asks agents to verify backlinks when the connected MCP exposes that capability.
+
+Rows records use four statuses:
+
+- `Pending` — captured and waiting for processing.
+- `Processing` — currently being handled by an agent.
+- `Processed` — processing and required validation completed.
+- `Needs Review` — blocked, incomplete, or requiring human review.
+
+The status fields help agents coordinate, but they are **not an atomic distributed lock**. The Skill explicitly requires agents to re-fetch records and avoid concurrent edits.
+
+## Install the Skill
 
 ### Claude Code and Codex
 
-Install the Skill from the public repository's main branch:
+Install from the public repository with the Skills CLI:
 
 ~~~bash
 npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
@@ -60,80 +95,107 @@ npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
 
 ### WorkBuddy
 
-WorkBuddy imports a local Skill package through its UI. Build the package:
+Build the WorkBuddy-compatible ZIP from a clone of this repository:
 
 ~~~bash
 python scripts/package_workbuddy_skill.py
 ~~~
 
-Then open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill** and upload `dist/cclucky-llm-wiki-workbuddy.zip`.
+Upload the generated file:
 
-See [docs/workbuddy-installation.md](docs/workbuddy-installation.md) for details.
+~~~text
+dist/cclucky-llm-wiki-workbuddy.zip
+~~~
+
+In WorkBuddy, open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill**.
+
+See [WorkBuddy installation](docs/workbuddy-installation.md).
 
 ### Other compatible agents
 
-Use the client's documented Skill installation method. If the client is not supported by the Skills CLI, copy **SKILL.md** and **references/** into its supported skills directory.
+Use the client's documented Skill installation method. If the client does not support the Skills CLI or package import, copy **SKILL.md** and **references/** into its supported skills directory.
 
-Then connect that agent to Notion using the official remote MCP endpoint:
+## Connect Notion MCP
+
+Configure Notion MCP independently in every agent/client. The official remote endpoint used by this project is:
 
 ~~~text
 https://mcp.notion.com/mcp
 ~~~
 
-Complete the agent-specific authorization and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox workspace, its nested Rows database, Sources, Entities, Concepts, Syntheses, and System.
+In the agent's MCP settings:
 
-Client-specific MCP setup is intentionally outside this repository. See [docs/agent-setup.md](docs/agent-setup.md).
+1. Add the remote Notion MCP endpoint using the transport supported by that client.
+2. Complete Notion's authorization flow.
+3. Grant access to the existing **CCLUCKY Knowledge OS** root page and its required children/databases.
+4. Verify that the agent can search, read, create, and update the Rows database and knowledge pages.
 
-## Use
+Each agent owns its own connection and authorization, even though all agents access the same user's Notion workspace.
+
+**This repository does not provide or configure an MCP server.** It does not implement OAuth, store Notion credentials, run a local wiki backend, or synchronize separate knowledge stores. Do not paste Notion tokens into chat or commit credentials to this repository.
+
+See [Agent setup](docs/agent-setup.md).
+
+## Use it
 
 Once the Skill and Notion MCP are connected, use natural language:
 
-| Intent | Example |
+| Task | Example |
 |---|---|
-| Ingest | "把这篇文章沉淀到我的知识库" |
-| Query | "结合知识库中已有的项目经验，分析一个技术方案" |
-| Update | "把刚才确定的项目决策同步到知识库" |
-| Lint | "检查知识库里的孤立页面、重复页面和矛盾" |
-| Graph | "梳理 Agent、项目和技术概念之间的关系" |
+| Ingest | 把这篇文章沉淀到我的知识库 |
+| Process intake | 处理 Rows 里待处理的资料 |
+| Query | 结合知识库中已有的项目经验，分析这个技术方案 |
+| Update | 把刚才确定的项目决策同步到知识库 |
+| Lint | 检查知识库里的孤立页面、重复页面和矛盾 |
+| Graph | 梳理 Agent、项目和技术概念之间的关系 |
 
-Natural language is the portable cross-agent interface. Some clients can add /ingest, /query, /lint, and /graph aliases, but installing one Skill does not register those slash commands in every client.
+Natural language is the portable interface across clients. Installing a Skill does **not** automatically register native `/ingest`, `/query`, `/lint`, or `/graph` slash commands in every agent.
 
-## Knowledge model
+## Repository structure
 
-The Skill discovers the workspace by page titles; it does not hardcode private page IDs.
+~~~text
+llm-wiki-agent/
+├── SKILL.md                         # Portable Agent Skill entrypoint
+├── references/
+│   ├── ingest.md                    # Capture, ingest, validate, and recover
+│   ├── query-update.md              # Query and maintain canonical knowledge
+│   ├── maintenance.md               # Lint and graph workflows
+│   ├── notion-schema.md             # Workspace and Rows schema contract
+│   └── security-and-concurrency.md  # Privacy and multi-agent safety
+├── scripts/
+│   └── package_workbuddy_skill.py   # Build the WorkBuddy ZIP
+├── docs/
+│   ├── agent-setup.md
+│   ├── workbuddy-installation.md
+│   └── notion-ingest-acceptance.md
+├── tests/
+├── AGENTS.md
+└── README.md
+~~~
 
-- **Inbox** — the user-facing collection workspace and dashboard.
-- **Rows** — the single shared Notion database nested under Inbox. Preserve original source material in each row before processing.
-- **Sources** — source summaries, provenance, key claims, and evidence.
-- **Entities** — people, organizations, products, repositories, projects, and systems.
-- **Concepts** — reusable methods, technical principles, frameworks, and mental models.
-- **Syntheses** — conclusions and comparisons built from multiple sources.
-- **System** — operating rules, navigation, architecture decisions, and maintenance notes.
+The runtime Skill is **SKILL.md + references/**. Documentation describes installation and acceptance. The packaging script only bundles the runtime Skill for WorkBuddy.
 
-Internal relationships must use Notion-native page mentions. A native mention creates a backlink on the mentioned page. Plain text titles and ordinary URL hyperlinks are not a substitute.
+## Validation and compatibility
 
-See:
-- [SKILL.md](SKILL.md) — main Skill instructions
-- [references/ingest.md](references/ingest.md) — capture and ingest workflow
-- [references/query-update.md](references/query-update.md) — query and update workflow
-- [references/maintenance.md](references/maintenance.md) — lint and graph
-- [references/notion-schema.md](references/notion-schema.md) — workspace schema
-- [references/security-and-concurrency.md](references/security-and-concurrency.md) — privacy and multi-agent safety
-- [docs/notion-ingest-acceptance.md](docs/notion-ingest-acceptance.md) — end-to-end and cross-agent acceptance checklist
+Run the repository checks locally:
 
-## What this fork contains
+~~~bash
+python -m unittest discover -s tests -v
+python scripts/package_workbuddy_skill.py
+~~~
 
-The repository contains reusable instructions and optional legacy local-mode tooling. It does **not** contain user knowledge, Notion credentials, workspace IDs, or a hosted service.
+No third-party Python dependencies are required.
 
-- **Primary:** Notion-first Agent Skill in SKILL.md and references/.
-- **Legacy local/Obsidian mode:** existing Python tools under tools/ can still process local Markdown files when explicitly requested. It is not the default shared multi-agent workflow.
-- **Legacy Notion publisher:** tools/notion_sync.py mirrors local Markdown to Notion in one direction. It is not used by the Notion-first Skill and does not provide bidirectional sync. See [docs/legacy-notion-publisher.md](docs/legacy-notion-publisher.md).
+CI validates the Skill contract, references, privacy checks, and WorkBuddy package build. **A passing CI run does not prove that a particular agent can access a user's Notion workspace.** Run the [end-to-end acceptance checklist](docs/notion-ingest-acceptance.md) independently in every client, including Rows writes, native mentions, and backlink verification where available.
 
-## Privacy boundary
+## Design boundaries
 
-This is a public repository. Never commit original Rows source material, personal wiki exports, private project documents, workspace-specific Notion IDs, OAuth tokens, API keys, cookies, or local sync state. Local raw/wiki/graph output is user data, not project source code.
+- **Not a local wiki engine:** the legacy Obsidian/local Markdown runtime and one-way publisher are not part of this project.
+- **Not an MCP server:** the agent host configures and authorizes its own Notion MCP connection.
+- **Not a data repository:** personal knowledge stays in the user's Notion workspace, not in GitHub.
+- **Not a destructive sync tool:** source material is preserved; conflicts and uncertain updates are surfaced for review.
 
-The Skill never asks agents to upload personal knowledge into this GitHub repository. Each user keeps their knowledge in their own Notion workspace.
+Never commit original Rows content, personal wiki exports, private project documents, workspace-specific Notion IDs, OAuth tokens, API keys, cookies, passwords, or local state.
 
 ## License
 

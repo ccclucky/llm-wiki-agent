@@ -1,21 +1,21 @@
-name: Python tests
+name: Skill tests
 
 on:
   push:
-    branches: ["main", "feat/**"]
+    branches: ["main", "refactor/**"]
   pull_request:
 
 jobs:
-  tests:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile Python files
-        run: python -m compileall -q tools tests scripts
-      - name: Run unit tests
+      - name: Compile test and packaging scripts
+        run: python -m compileall -q scripts tests
+      - name: Run contract and package tests
         run: python -m unittest discover -s tests -v
       - name: Build WorkBuddy Skill package
         run: python scripts/package_workbuddy_skill.py --output "$RUNNER_TEMP/cclucky-llm-wiki-workbuddy.zip"

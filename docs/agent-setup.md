@@ -6,44 +6,27 @@ The repository distributes the Skill. It is not a server and does not need to be
 
 ### Claude Code and Codex
 
-Using the Skills CLI, install the current development branch:
-
-~~~bash
-npx skills add https://github.com/ccclucky/llm-wiki-agent/tree/feat/notion-first-agent-skill -g -a claude-code -a codex
-~~~
-
-After the branch is merged into main:
-
 ~~~bash
 npx skills add ccclucky/llm-wiki-agent -g -a claude-code -a codex
 ~~~
 
 ### WorkBuddy
 
-WorkBuddy imports a local Skill package through its UI; do not use the Skills CLI command above for WorkBuddy.
+WorkBuddy imports a local Skill package through its UI. Build the package from a clone of this repository:
 
-1. Build the package from the repository root:
+~~~bash
+python scripts/package_workbuddy_skill.py
+~~~
 
-   ~~~bash
-   python scripts/package_workbuddy_skill.py
-   ~~~
-
-2. In WorkBuddy, open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill**.
-3. Upload `dist/cclucky-llm-wiki-workbuddy.zip`.
-4. Complete WorkBuddy's Skill security check. Review any high-risk warning rather than blindly approving it.
-5. Start a new conversation and ask WorkBuddy to invoke **CCLUCKY LLM Wiki**.
-
-The package contains only `SKILL.md` and its referenced `references/` resources. WorkBuddy stores uploaded Skills in the user configuration area for use across projects; project-only Skills can instead live in that project's skills directory. Use the UI import path above so WorkBuddy manages the location.
-
-See [the detailed WorkBuddy guide](workbuddy-installation.md).
+Then open **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill** and upload the generated ZIP. See [the WorkBuddy guide](workbuddy-installation.md).
 
 ### Other compatible agents
 
-Use the client's documented Skill installation method. If it supports neither the Skills CLI nor package import, copy `SKILL.md` and `references/` into its supported skills directory.
+Use the client's documented Skill installation method. If it supports neither the Skills CLI nor package import, copy **SKILL.md** and **references/** into its supported skills directory.
 
 ## 2. Connect Notion MCP
 
-Configure that agent's own Notion MCP connection using the agent's normal MCP settings.
+Configure the agent's own Notion MCP connection using that agent's normal MCP settings.
 
 Official remote MCP endpoint:
 
@@ -51,9 +34,9 @@ Official remote MCP endpoint:
 https://mcp.notion.com/mcp
 ~~~
 
-Complete OAuth/authorization in that agent and grant access to the **CCLUCKY Knowledge OS** root page, including the Inbox workspace, its nested Rows database, Sources, Entities, Concepts, Syntheses, and System.
+Use the client's supported remote MCP transport, complete Notion authorization, and grant access to the **CCLUCKY Knowledge OS** root page and its required children/databases.
 
-The Skill does not configure MCP, manage OAuth, or share credentials between agents. Never paste a Notion token into chat or commit it to this repository.
+This is a remote MCP endpoint. The agent host connects to it; users normally do not need to launch a local stdio process or install a custom Notion server. The Skill does not configure MCP, manage OAuth, or share credentials between agents. Never paste a Notion token into chat or commit it to this repository.
 
 ## 3. Verify access
 
@@ -65,7 +48,7 @@ Ask the agent to verify it can:
 - create native Notion page mentions;
 - inspect backlinks when the client's MCP exposes that operation.
 
-Exact MCP configuration steps differ by client and are intentionally not embedded here. This project does not manage client-specific MCP settings or credentials.
+Exact MCP tool names and capabilities differ by client. The Skill instructs the agent to discover the available tools rather than assuming a fixed tool naming scheme.
 
 ## 4. Run end-to-end acceptance
 
@@ -78,17 +61,15 @@ Record per-client results in the private LLM Wiki project page in Notion. Do not
 ## No repository clone required for daily use
 
 The portable entrypoint across clients is natural language. A single Skill does not guarantee native /ingest or /query slash commands; those aliases are client-specific. After installation, normal use is conversational:
-- "把这篇文章沉淀到我的知识库"
-- "查询我之前记录的某个技术主题"
-- "更新某个项目的知识"
-- "检查知识库里的孤立页面和矛盾"
-
-The Skill uses the connected Notion MCP. The user does not need to clone the repository, maintain local Markdown files, or create a separate Rows database for each agent.
+- 把这篇文章沉淀到我的知识库
+- 查询我之前记录的某个技术主题
+- 更新某个项目的知识
+- 检查知识库里的孤立页面和矛盾
 
 ## Troubleshooting
 
 - **Skill loads but cannot find the workspace:** verify the Notion MCP account and page permissions.
-- **Workspace found but Rows database missing:** locate the exact Rows database nested under the Inbox workspace; do not create a duplicate without checking with the user.
+- **Workspace found but Rows database missing:** locate the exact Rows database nested under the Inbox workbench; do not create a duplicate without checking with the user.
 - **Read works but write fails:** check whether the Notion MCP connection has edit access.
-- **Agent has no Notion MCP tools:** configure Notion MCP in that agent first. Do not fall back to local files and claim shared knowledge access.
+- **Agent has no Notion MCP tools:** configure the official remote Notion MCP endpoint in that agent first. Do not fall back to local files and claim shared knowledge access.
 - **Backlinks cannot be inspected:** native page mentions still create Notion backlinks, but report verification as unavailable rather than claiming it was checked.

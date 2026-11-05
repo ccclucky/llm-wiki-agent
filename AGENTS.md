@@ -1,21 +1,32 @@
-# Agent instructions
+# Repository contributor instructions
 
-This repository's default workflow is the **Notion-first CCLUCKY LLM Wiki Skill**.
+This repository distributes one portable, Notion-first Agent Skill.
 
-Before any knowledge-base task, read [SKILL.md](SKILL.md) and the relevant file under [references/](references/).
+Before changing the project, read [SKILL.md](SKILL.md) and the relevant files under [references/](references/).
 
-## Default behavior
+## Scope
 
-- Use the connected Notion MCP and the user's shared Notion workspace.
-- Use the Inbox workspace to capture material in Rows, then follow Rows → Ingest → Sources / Entities / Concepts / Syntheses.
-- Use native Notion page mentions for internal links so Notion can create backlinks.
-- Treat Notion as the canonical knowledge store.
-- Do not read or write local raw/ or wiki/ as the default workflow.
-- Do not ask the user to clone this repository for daily use.
-- Do not configure or manage the agent's Notion MCP connection; that is client-specific setup.
+- **Runtime entrypoint:** SKILL.md.
+- **Runtime procedures:** references/.
+- **Packaging:** scripts/ contains only deterministic packaging needed by clients such as WorkBuddy.
+- **Documentation:** docs/ contains installation and acceptance guidance; it is not a runtime dependency.
+- **External dependency:** each agent host configures and authorizes its own Notion MCP connection.
 
-If Notion MCP is unavailable or lacks access, stop and explain the connection/permission needed. Never claim that local files were synced to the shared wiki.
+## Architecture constraints
 
-## Legacy local mode
+- Do not add a custom MCP server, OAuth implementation, Notion API backend, database, local wiki engine, or synchronization service.
+- Do not add client-specific instructions when the same behavior can be expressed in the portable Skill.
+- Do not hardcode workspace-specific Notion page IDs or credentials.
+- Do not commit user knowledge, source documents, workspace exports, tokens, or private project data.
+- Keep the Skill usable by a new agent that has only this Skill and its own authorized Notion MCP connection.
 
-The Python tools under tools/ and the local raw/wiki/ layout are retained for users who explicitly request the original local/Obsidian workflow. They are not the default and must not be used as a fallback for shared Notion access. See docs/legacy-local-mode.md.
+## Validation
+
+Run:
+
+~~~bash
+python -m unittest discover -s tests -v
+python scripts/package_workbuddy_skill.py --output /tmp/cclucky-llm-wiki-workbuddy.zip
+~~~
+
+The generated package must contain only SKILL.md and the referenced runtime documents.
