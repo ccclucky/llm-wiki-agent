@@ -17,9 +17,9 @@ Use this Skill when the user asks to map, visualize, or understand relationships
 
 1. Load **knowledge-context** using the host's native Skill mechanism before operating:
 
-- If the host exposes a Skill tool, call it with `knowledge-context`.
-- If the host uses Notion MCP Skills, find `knowledge-context` in `notion_get_enabled_skills` and load it with `notion_download_skill` using its page ID. If the host already injected it automatically, apply the injected context without downloading it again.
-- If neither mechanism is available, stop and report that the shared context could not be loaded; do not guess the workspace model or safety rules.
+   - If the host exposes a Skill tool, call it with `knowledge-context`.
+   - If the host uses Notion MCP Skills, find `knowledge-context` in `notion_get_enabled_skills` and load it with `notion_download_skill` using its page ID. If the host already injected it automatically, apply the injected context without downloading it again.
+   - If neither mechanism is available, stop and report that the shared context could not be loaded; do not guess the workspace model or safety rules.
 2. Read [references/graph.md](references/graph.md).
 3. Discover whether this Notion MCP can inspect inbound backlinks and enumerate relevant pages.
 

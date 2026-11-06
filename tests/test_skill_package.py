@@ -82,7 +82,9 @@ class SkillSuiteTests(unittest.TestCase):
         for name in ("kb-ingest", "kb-query", "kb-update", "kb-lint", "kb-graph"):
             content = (SKILLS_DIR / name / "SKILL.md").read_text(encoding="utf-8")
             with self.subTest(skill=name):
-                self.assertIn("Call the Skill tool with **knowledge-context**", content)
+                self.assertIn("Load **knowledge-context** using the host's native Skill mechanism", content)
+                self.assertIn("notion_get_enabled_skills", content)
+                self.assertIn("notion_download_skill", content)
 
     def test_skill_local_references_exist(self):
         for directory in skill_dirs():
