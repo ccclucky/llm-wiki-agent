@@ -1,0 +1,5 @@
+interface:
+  display_name: "KB Setup"
+  short_description: "Verify Notion MCP and Knowledge OS access."
+policy:
+  allow_implicit_invocation: false

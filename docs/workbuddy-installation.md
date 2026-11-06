@@ -1,8 +1,8 @@
 # WorkBuddy installation
 
-This guide packages the canonical Skill for WorkBuddy. It does not create a custom Connector or MCP server. The Skill uses the Notion MCP connection configured separately by the user in WorkBuddy.
+WorkBuddy imports Skills individually. This repository therefore builds one ZIP per Skill rather than one oversized package.
 
-## 1. Build the Skill package
+## 1. Build all Skill packages
 
 From a clone of this repository:
 
@@ -10,55 +10,64 @@ From a clone of this repository:
 python scripts/package_workbuddy_skill.py
 ~~~
 
-The script creates:
+The script creates eight ZIP files under `dist/`, one for each directory under `skills/`.
 
-~~~text
-dist/cclucky-llm-wiki-workbuddy.zip
+To build only one:
+
+~~~bash
+python scripts/package_workbuddy_skill.py --skill kb-ingest
 ~~~
 
-The ZIP contains one package root, cclucky-llm-wiki/, with:
-- SKILL.md
-- references/*.md
+To choose another output directory:
 
-The Skill frontmatter includes WorkBuddy's marketplace metadata fields while retaining the standard name and description fields used by other compatible agents.
+~~~bash
+python scripts/package_workbuddy_skill.py --output-dir /tmp/cclucky-skill-packages
+~~~
 
-## 2. Import it in WorkBuddy
+Each ZIP contains one package root with:
+- `SKILL.md`;
+- `agents/openai.yaml` when present;
+- that Skill's local `references/` files.
+
+## 2. Import all eight Skills
+
+For the complete suite, repeat the following for each generated ZIP:
 
 1. Open **Experts → Skills → Connectors → Skills**.
 2. Click **Add Skill → Upload Skill**.
-3. Select the generated ZIP.
-4. Wait for the Skill security check and installation to finish.
-5. Start a new conversation and ask: "把这篇文章沉淀到我的知识库" or "检查知识库里的孤立页面和矛盾".
+3. Select one ZIP from `dist/`.
+4. Wait for the security check and installation to finish.
+5. Repeat until all eight Skills are installed.
 
-Uploaded or created Skills are stored in WorkBuddy's user configuration directory by default and can be used across projects. If a Skill should be limited to one project, WorkBuddy also supports a project-level skills directory. Prefer UI upload unless you have a client-specific reason to manage the directory manually.
+Install these names:
+- `kb`
+- `kb-setup`
+- `kb-ingest`
+- `kb-query`
+- `kb-update`
+- `kb-lint`
+- `kb-graph`
+- `knowledge-context`
+
+The first two are user-invoked commands. Workflow Skills can be invoked explicitly and may also be selected automatically. `knowledge-context` supplies the shared data model and safety rules.
 
 ## 3. Connect Notion MCP separately
 
-The Skill does not include a Notion server or credentials. In WorkBuddy, configure a separate remote MCP connection using the official endpoint:
+The Skills do not include a Notion server or credentials. Configure a separate remote MCP connection in WorkBuddy using:
 
 ~~~text
 https://mcp.notion.com/mcp
 ~~~
 
-Use the remote HTTP/Streamable HTTP connection option if offered, complete the Notion authorization flow, and grant the connection access to the existing **CCLUCKY Knowledge OS** root page and its required children/databases.
+Complete Notion authorization and grant access to the existing **CCLUCKY Knowledge OS** root page and required child pages/databases.
 
-The WorkBuddy host manages the MCP connection. This project does not start a local stdio process, configure OAuth, or store credentials. The exact MCP UI fields may vary by WorkBuddy version. Do not paste a Notion token into the Skill, chat, or public repository.
+## 4. Verify
 
-## 4. Verify the integration
+In a new conversation:
+1. Run `/kb` and confirm the command hub lists all workflows.
+2. Run `/kb-setup` and verify workspace access.
+3. Ask a knowledge question and confirm `knowledge-context` is available.
+4. Use a real, non-sensitive source or an approved test source to verify `/kb-ingest`.
+5. Verify query/update/lint/graph behavior within the user's chosen scope.
 
-In a new WorkBuddy conversation, ask it to:
-1. identify the installed CCLUCKY LLM Wiki Skill;
-2. find CCLUCKY Knowledge OS and read the relevant System guidance;
-3. locate the Rows database nested under Inbox and read its current schema;
-4. confirm it can create/update a Rows record and a Source page;
-5. confirm it can create a native Notion page mention and query backlinks.
-
-Then run the [end-to-end acceptance checklist](notion-ingest-acceptance.md) using a real, non-sensitive source the user wants to preserve, or a test source explicitly approved by the user.
-
-A Skill being visible in WorkBuddy does not prove Notion MCP is connected. If read/write, native mention, or backlink operations are unavailable, record the exact limitation in the private LLM Wiki project page and do not claim full acceptance.
-
-## Official WorkBuddy references
-
-- [WorkBuddy Skills: import, storage, security checks](https://www.workbuddy.ai/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills)
-- [WorkBuddy Open Platform: Skill package structure and frontmatter](https://open.workbuddy.cn/en/docs/skill)
-- [WorkBuddy Open Platform: MCP + Skill and Connector formats](https://open.workbuddy.cn/docs/connector)
+A Skill being visible does not prove Notion MCP is connected. Record capability gaps; do not claim full acceptance if read/write/native mention/backlink operations are unavailable.

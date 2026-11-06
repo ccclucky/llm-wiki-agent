@@ -1,0 +1,3 @@
+interface:
+  display_name: "KB Lint"
+  short_description: "Audit quality, provenance, duplicates, and contradictions."

@@ -1,8 +1,8 @@
-name: Skill tests
+name: Skill suite tests
 
 on:
   push:
-    branches: ["main", "refactor/**"]
+    branches: ["main", "feat/**", "refactor/**"]
   pull_request:
 
 jobs:
@@ -13,16 +13,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Compile test and packaging scripts
+      - name: Compile scripts and tests
         run: python -m compileall -q scripts tests
-      - name: Run contract and package tests
+      - name: Run Skill suite contract and packaging tests
         run: python -m unittest discover -s tests -v
-      - name: Build WorkBuddy Skill package
-        run: python scripts/package_workbuddy_skill.py --output "$RUNNER_TEMP/cclucky-llm-wiki-workbuddy.zip"
-      - name: Upload WorkBuddy Skill package
+      - name: Build all WorkBuddy Skill packages
+        run: python scripts/package_workbuddy_skill.py --output-dir "$RUNNER_TEMP/cclucky-skill-packages"
+      - name: Upload WorkBuddy Skill packages
         uses: actions/upload-artifact@v4
         with:
-          name: cclucky-llm-wiki-workbuddy
-          path: ${{ runner.temp }}/cclucky-llm-wiki-workbuddy.zip
+          name: cclucky-knowledge-skills-workbuddy
+          path: ${{ runner.temp }}/cclucky-skill-packages/*.zip
           if-no-files-found: error
           retention-days: 14

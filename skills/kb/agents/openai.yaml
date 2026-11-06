@@ -1,0 +1,5 @@
+interface:
+  display_name: "KB Command Hub"
+  short_description: "Show and route CCLUCKY knowledge commands."
+policy:
+  allow_implicit_invocation: false

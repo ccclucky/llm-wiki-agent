@@ -1,0 +1,3 @@
+interface:
+  display_name: "KB Update"
+  short_description: "Update canonical pages and preserve knowledge history."

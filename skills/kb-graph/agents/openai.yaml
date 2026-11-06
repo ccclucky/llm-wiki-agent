@@ -1,0 +1,3 @@
+interface:
+  display_name: "KB Graph"
+  short_description: "Map relationships, hubs, gaps, and contradictions."
