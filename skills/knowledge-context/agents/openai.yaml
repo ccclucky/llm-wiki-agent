@@ -1,0 +1,3 @@
+interface:
+  display_name: "Knowledge Context"
+  short_description: "Shared Notion knowledge model, evidence, and safety rules."

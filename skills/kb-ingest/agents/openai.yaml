@@ -1,0 +1,3 @@
+interface:
+  display_name: "KB Ingest"
+  short_description: "Capture and process source material into the wiki."

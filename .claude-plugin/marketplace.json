@@ -1,0 +1,23 @@
+{
+  "name": "cclucky",
+  "owner": {
+    "name": "CCLUCKY"
+  },
+  "description": "CCLUCKY's cross-agent Notion knowledge-management Skills.",
+  "plugins": [
+    {
+      "name": "cclucky-knowledge-skills",
+      "source": "./",
+      "description": "A suite of slash commands and model-invoked Skills for a shared Notion knowledge base.",
+      "category": "productivity",
+      "keywords": [
+        "knowledge-management",
+        "notion",
+        "personal-wiki",
+        "ingest",
+        "query",
+        "lint"
+      ]
+    }
+  ]
+}

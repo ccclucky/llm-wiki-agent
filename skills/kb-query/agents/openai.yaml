@@ -1,0 +1,3 @@
+interface:
+  display_name: "KB Query"
+  short_description: "Search knowledge and answer with source evidence."

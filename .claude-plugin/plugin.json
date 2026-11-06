@@ -1,0 +1,28 @@
+{
+  "name": "cclucky-knowledge-skills",
+  "version": "0.3.0",
+  "description": "A cross-agent Notion knowledge-management suite: setup, ingest, query, update, lint, graph, and shared knowledge context.",
+  "author": {
+    "name": "CCLUCKY"
+  },
+  "repository": "https://github.com/ccclucky/llm-wiki-agent",
+  "license": "MIT",
+  "keywords": [
+    "knowledge-management",
+    "notion",
+    "agent-skills",
+    "personal-knowledge-base",
+    "ingest",
+    "rag"
+  ],
+  "skills": [
+    "./skills/kb",
+    "./skills/kb-setup",
+    "./skills/kb-ingest",
+    "./skills/kb-query",
+    "./skills/kb-update",
+    "./skills/kb-lint",
+    "./skills/kb-graph",
+    "./skills/knowledge-context"
+  ]
+}
