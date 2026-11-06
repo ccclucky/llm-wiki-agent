@@ -82,9 +82,18 @@ class SkillSuiteTests(unittest.TestCase):
         for name in ("kb-ingest", "kb-query", "kb-update", "kb-lint", "kb-graph"):
             content = (SKILLS_DIR / name / "SKILL.md").read_text(encoding="utf-8")
             with self.subTest(skill=name):
-                self.assertIn("Load **knowledge-context** using the host's native Skill mechanism", content)
-                self.assertIn("notion_get_enabled_skills", content)
-                self.assertIn("notion_download_skill", content)
+                self.assertIn("Load the locally installed **knowledge-context** Skill", content)
+                self.assertIn("host's native Skill mechanism", content)
+                self.assertNotIn("notion_get_enabled_skills", content)
+                self.assertNotIn("notion_download_skill", content)
+
+    def test_skills_do_not_depend_on_notion_skill_registry(self):
+        for path in public_markdown_files():
+            content = path.read_text(encoding="utf-8")
+            with self.subTest(path=path):
+                self.assertNotIn("notion_get_enabled_skills", content)
+                self.assertNotIn("notion_download_skill", content)
+        self.assertFalse((ROOT / "docs/notion-sync.md").exists())
 
     def test_skill_local_references_exist(self):
         for directory in skill_dirs():

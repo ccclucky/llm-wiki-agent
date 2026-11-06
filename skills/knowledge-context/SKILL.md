@@ -5,7 +5,7 @@ display_name: "Knowledge Context"
 display_name_en: "knowledge-context"
 description_zh: "为知识管理工作流提供 Notion 数据模型、证据规范、安全与多 Agent 协作规则。"
 description_en: "CCLUCKY Notion knowledge-management Skill: knowledge-context."
-version: "0.3.1"
+version: "0.3.2"
 author: "CCLUCKY"
 ---
 
@@ -13,7 +13,7 @@ author: "CCLUCKY"
 
 This is the shared policy and data-model Skill used by the CCLUCKY knowledge workflow Skills.
 
-Load and apply it whenever a task touches the user's CCLUCKY Knowledge OS. Workflow Skills must load this Skill through the host's native mechanism before operating. Use the Skill tool where available; for Notion MCP-connected agents, discover the enabled `knowledge-context` page with `notion_get_enabled_skills` and load it with `notion_download_skill`. If the host already injects it automatically, do not load it twice; for a direct natural-language request, use this context before deciding what action is safe.
+Load and apply this Skill whenever a task touches the user's CCLUCKY Knowledge OS. It is distributed as part of the local Skill suite. Workflow Skills must load this locally installed Skill through the host's native Skill mechanism (for example, the Skill tool) before operating. If the host already injects it automatically, do not load it twice. If it is missing, ask the user to install it alongside the selected workflow Skill.
 
 ## Canonical architecture
 
@@ -64,5 +64,5 @@ Read [references/security-and-concurrency.md](references/security-and-concurrenc
 
 - User-invoked commands are reached only when the user types their command.
 - Model-invoked workflow Skills may be selected automatically when the user's request clearly matches their description.
-- A workflow Skill may call this model-invoked Skill using the Skill tool.
+- A workflow Skill may load this model-invoked Skill from the locally installed suite using the host's native Skill invocation mechanism.
 - Do not try to invoke user-invoked `kb` or `kb-setup` Skills from another Skill.

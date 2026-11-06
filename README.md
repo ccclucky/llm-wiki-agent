@@ -39,43 +39,54 @@ The workflow Skills call `knowledge-context` before operating. It is also availa
 
 ## Install
 
-Choose **one distribution route per agent**. Do not install the plugin and the Skills CLI copy into the same agent profile, or the Skills may appear twice.
+The recommended distribution method is the [Skills CLI](https://github.com/vercel-labs/skills). This repository contains eight independent Skills. Choose which Skills and which agent to install.
 
-### Claude Code — plugin marketplace
+### Discover and install
 
-~~~bash
-claude plugin marketplace add ccclucky/llm-wiki-agent
-claude plugin install cclucky-knowledge-skills@cclucky
-~~~
-
-The plugin exposes all eight Skills. Slash commands are available by their Skill names.
-
-### Codex — plugin marketplace
+List available Skills without installing:
 
 ~~~bash
-codex plugin marketplace add ccclucky/llm-wiki-agent
-codex plugin add cclucky-knowledge-skills@cclucky
+npx skills add ccclucky/llm-wiki-agent --list
 ~~~
 
-The `agents/openai.yaml` files provide display metadata and explicit invocation policy for Codex.
-
-### Other compatible agents — Skills CLI
+Start the interactive installer:
 
 ~~~bash
-npx skills@latest add ccclucky/llm-wiki-agent -g
+npx skills add ccclucky/llm-wiki-agent
 ~~~
 
-Select all eight Skills in the installer, or select only the ones you need. To update a Skills CLI installation, use the CLI's update command and re-run add when you want to pick up newly added Skills.
+Choose the target agent, project or global scope, and the Skills you want. The CLI supports Antigravity, Codex, Claude Code, OpenCode, and many other agents.
 
-### WorkBuddy — uploadable Skill packages
+### Install selected Skills
 
-Build eight individual ZIP packages:
+Workflow Skills depend on the shared `knowledge-context` Skill. When installing only selected workflows, include `knowledge-context` as well:
 
 ~~~bash
-python scripts/package_workbuddy_skill.py
+npx skills add ccclucky/llm-wiki-agent --skill kb-query --skill knowledge-context --agent antigravity --global
 ~~~
 
-The script creates one ZIP per Skill under `dist/`. Upload all eight through **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill**. See [WorkBuddy installation](docs/workbuddy-installation.md).
+Install all eight Skills for Antigravity:
+
+~~~bash
+npx skills add ccclucky/llm-wiki-agent --skill '*' --agent antigravity --global
+~~~
+
+Omit `--global` for project-level installation. See the CLI's [supported agents](https://github.com/vercel-labs/skills/blob/main/docs/agents.md) and [command reference](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
+
+### Update installed Skills
+
+~~~bash
+npx skills update
+~~~
+
+### Other client distribution routes
+
+The repository also retains client-specific packaging where useful:
+
+- **Claude Code / Codex:** plugin marketplace manifests are maintained in the repository.
+- **WorkBuddy:** build eight individual ZIP packages with `python scripts/package_workbuddy_skill.py`, then upload them through **Experts → Skills → Connectors → Skills → Add Skill → Upload Skill**. See [WorkBuddy installation](docs/workbuddy-installation.md).
+
+Use one distribution route per agent profile to avoid duplicate Skill registrations.
 
 ## Connect Notion MCP separately
 
@@ -92,22 +103,11 @@ https://mcp.notion.com/mcp
 
 The agents use separate MCP connections but access the same user's Notion workspace.
 
+Notion MCP is only the data-access layer for the Knowledge OS. Skill discovery, installation, command registration, and updates are handled locally by the agent's installed Skills; no Notion-hosted Skill registry or synchronization step is involved.
+
 **This repository does not provide an MCP server, OAuth implementation, database, backend, or synchronization service.** Do not paste Notion tokens into chat or commit credentials.
 
 See [Agent setup](docs/agent-setup.md).
-
-## Skill source of truth and Notion mirror
-
-There are two distinct sources of truth:
-
-- **GitHub `main` is the only source of truth for Skill instructions, metadata, references, and distribution packages.** Make changes here through pull requests.
-- **Notion `System → Knowledge Skills` is a delivery mirror** that exposes the GitHub-sourced Skills to ChatGPT and other agents connected through Notion MCP. Do not independently edit workflow instructions in the Notion copies.
-- **Notion `CCLUCKY Knowledge OS` remains the source of truth for personal knowledge data** (Rows, Sources, Entities, Concepts, Syntheses, and System content).
-
-After a Skill change is merged into `main`, sync the affected Skill and its complete `references/` directory to the matching Notion Skill page. Preserve its page identity and enabled settings. Verify it appears in `notion_get_enabled_skills` and can be loaded with `notion_download_skill` before retiring an older copy.
-
-Notion synchronization is deliberately separate from public CI: this repository must never contain Notion credentials, workspace IDs, or personal knowledge exports. See [Notion Skill mirror sync](docs/notion-sync.md).
-
 
 ## How the knowledge workflow works
 

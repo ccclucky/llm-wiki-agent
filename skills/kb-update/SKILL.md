@@ -5,7 +5,7 @@ display_name: "KB Update"
 display_name_en: "kb-update"
 description_zh: "更新已有知识页面，保留来源、历史和关联关系。"
 description_en: "CCLUCKY Notion knowledge-management Skill: kb-update."
-version: "0.3.1"
+version: "0.3.2"
 author: "CCLUCKY"
 ---
 
@@ -15,11 +15,7 @@ Use this Skill when the user asks to update, correct, supersede, or reconcile ex
 
 ## Before starting
 
-1. Load **knowledge-context** using the host's native Skill mechanism before operating:
-
-   - If the host exposes a Skill tool, call it with `knowledge-context`.
-   - If the host uses Notion MCP Skills, find `knowledge-context` in `notion_get_enabled_skills` and load it with `notion_download_skill` using its page ID. If the host already injected it automatically, apply the injected context without downloading it again.
-   - If neither mechanism is available, stop and report that the shared context could not be loaded; do not guess the workspace model or safety rules.
+1. Load the locally installed **knowledge-context** Skill through the host's native Skill mechanism (for example, the Skill tool). If the host has already injected it, do not load it again. If it is not installed, stop and ask the user to install it alongside this workflow Skill.
 2. Read [references/update.md](references/update.md).
 3. Confirm the connected Notion MCP exposes page read and targeted update operations.
 

@@ -5,7 +5,7 @@ display_name: "KB Setup"
 display_name_en: "kb-setup"
 description_zh: "检查当前 Agent 的 Notion MCP 连接、知识库权限和 Rows 数据结构，不负责配置 MCP。"
 description_en: "CCLUCKY Notion knowledge-management Skill: kb-setup."
-version: "0.3.0"
+version: "0.3.2"
 author: "CCLUCKY"
 disable-model-invocation: true
 ---
