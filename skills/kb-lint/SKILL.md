@@ -5,7 +5,7 @@ display_name: "KB Lint"
 display_name_en: "kb-lint"
 description_zh: "检查知识库重复、孤立页面、来源缺失、矛盾和待处理资料。"
 description_en: "CCLUCKY Notion knowledge-management Skill: kb-lint."
-version: "0.3.0"
+version: "0.3.1"
 author: "CCLUCKY"
 ---
 
@@ -15,7 +15,11 @@ Use this Skill when the user asks to audit, validate, diagnose, or assess knowle
 
 ## Before starting
 
-1. Call the Skill tool with **knowledge-context** and apply its shared workspace and safety rules.
+1. Load **knowledge-context** using the host's native Skill mechanism before operating:
+
+- If the host exposes a Skill tool, call it with `knowledge-context`.
+- If the host uses Notion MCP Skills, find `knowledge-context` in `notion_get_enabled_skills` and load it with `notion_download_skill` using its page ID. If the host already injected it automatically, apply the injected context without downloading it again.
+- If neither mechanism is available, stop and report that the shared context could not be loaded; do not guess the workspace model or safety rules.
 2. Read [references/lint.md](references/lint.md).
 3. Discover which search, query, page-read, and backlink operations this Notion MCP actually supports.
 

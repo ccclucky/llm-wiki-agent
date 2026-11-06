@@ -5,7 +5,7 @@ display_name: "Knowledge Context"
 display_name_en: "knowledge-context"
 description_zh: "为知识管理工作流提供 Notion 数据模型、证据规范、安全与多 Agent 协作规则。"
 description_en: "CCLUCKY Notion knowledge-management Skill: knowledge-context."
-version: "0.3.0"
+version: "0.3.1"
 author: "CCLUCKY"
 ---
 
@@ -13,7 +13,7 @@ author: "CCLUCKY"
 
 This is the shared policy and data-model Skill used by the CCLUCKY knowledge workflow Skills.
 
-Load and apply it whenever a task touches the user's CCLUCKY Knowledge OS. Workflow Skills call this Skill explicitly before operating; for a direct natural-language request, use this context before deciding what action is safe.
+Load and apply it whenever a task touches the user's CCLUCKY Knowledge OS. Workflow Skills must load this Skill through the host's native mechanism before operating. Use the Skill tool where available; for Notion MCP-connected agents, discover the enabled `knowledge-context` page with `notion_get_enabled_skills` and load it with `notion_download_skill`. If the host already injects it automatically, do not load it twice; for a direct natural-language request, use this context before deciding what action is safe.
 
 ## Canonical architecture
 

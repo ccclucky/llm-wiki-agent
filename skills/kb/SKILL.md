@@ -5,7 +5,7 @@ display_name: "KB Command Hub"
 display_name_en: "kb"
 description_zh: "CCLUCKY Knowledge Skills 命令入口，展示可用工作流并路由具体任务。"
 description_en: "CCLUCKY Notion knowledge-management Skill: kb."
-version: "0.3.0"
+version: "0.3.1"
 author: "CCLUCKY"
 disable-model-invocation: true
 ---
@@ -26,14 +26,14 @@ You are the user-facing command hub for the CCLUCKY Notion knowledge system.
 ## Routing
 
 1. If the user only asks what is available, show the commands above with one-line descriptions.
-2. If the user describes a concrete task and asks you to perform it, call the matching model-invoked Skill using the Skill tool:
+2. If the user describes a concrete task and asks you to perform it, load the matching model-invoked Skill through the host's native mechanism: use the Skill tool where available; for a Notion MCP-connected host, find the named Skill with `notion_get_enabled_skills` and load it with `notion_download_skill`.
    - capture or process source material → `kb-ingest`;
    - find or explain existing knowledge → `kb-query`;
    - change or correct existing knowledge → `kb-update`;
    - inspect quality → `kb-lint`;
    - map relationships → `kb-graph`.
-3. For connection/workspace verification, tell the user to run `/kb-setup`. It is intentionally user-invoked because it is an explicit setup action.
-4. Never try to invoke another user-invoked Skill. In particular, do not call `kb-setup` through the Skill tool.
+3. For connection/workspace verification, run `/kb-setup` only when the user explicitly asks for setup or verification. If the host does not support slash commands, load `kb-setup` explicitly through its native Skill mechanism. It is intentionally excluded from automatic invocation.
+4. Never automatically route to another user-invoked Skill. In particular, do not run `kb-setup` unless the user explicitly requests it.
 5. Do not perform a write merely because the user opened `/kb`; require a clear task.
 
 The command hub does not connect MCP, store knowledge, or replace the workflow Skills.
