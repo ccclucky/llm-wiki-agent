@@ -1,6 +1,6 @@
 # Repository contributor instructions
 
-This repository distributes a **suite of independent, composable Notion knowledge Skills**.
+This repository distributes a **suite of independent, composable Agent Skills** for managing one Notion-backed personal knowledge base.
 
 Before changing it, inspect the affected Skill's SKILL.md, its local references, and the invocation conventions below.
 
@@ -17,7 +17,7 @@ Before changing it, inspect the affected Skill's SKILL.md, its local references,
 ## Non-negotiable boundaries
 
 - Notion is the source of truth for the user's personal knowledge data.
-- GitHub `main` is the sole source of truth for distributable Skill instructions, metadata, and references; Notion's `System → Knowledge Skills` database is only a delivery mirror.
+- GitHub `main` is the sole source of truth for Skill instructions, metadata, references, and packages. Install and update Skills locally through the Skills CLI; Notion is not involved in Skill discovery or distribution.
 - Each agent host configures and authorizes its own Notion MCP connection.
 - Do not add a custom MCP server, OAuth implementation, Notion backend, database, local wiki engine, or sync service.
 - Do not hardcode workspace-specific Notion IDs or credentials.
@@ -29,8 +29,9 @@ Before changing it, inspect the affected Skill's SKILL.md, its local references,
 
 - User-invoked Skills are reachable only when the human types their command. A user-invoked Skill may call a model-invoked Skill, but must never call another user-invoked Skill.
 - Model-invoked Skills may be selected automatically when their descriptions match the task. Keep descriptions specific and include meaningful trigger context.
-- Cross-Skill dependencies must explicitly describe how to load the named Skill through the host's native mechanism. Use the Skill tool where available; for Notion MCP-connected agents, use `notion_get_enabled_skills` and `notion_download_skill`. Do not rely on a bare `/skill-name` mention or cross-folder relative links.
-- After merging Skill changes to `main`, update the matching Notion mirror page and references. Never edit the Notion copy as an independent source.
+- Cross-Skill dependencies must explicitly describe how to load the named Skill from the locally installed Skill suite through the host's native mechanism (for example, the Skill tool). Do not rely on a bare `/skill-name` mention or cross-folder relative links.
+- When selecting individual workflow Skills, install their shared `knowledge-context` dependency as well.
+- After merging Skill changes to `main`, users update local installations through `npx skills update`. There is no Notion Skill mirror to synchronize.
 - Shared data model and safety rules belong in `knowledge-context`; workflow-specific procedures belong with their owning Skill.
 
 ## Validation

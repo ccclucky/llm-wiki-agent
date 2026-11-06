@@ -1,7 +1,7 @@
 {
   "name": "cclucky-knowledge-skills",
-  "version": "0.3.0",
-  "description": "A cross-agent Notion knowledge-management suite: setup, ingest, query, update, lint, graph, and shared knowledge context.",
+  "version": "0.3.2",
+  "description": "A cross-agent local Skill suite for managing a Notion-backed personal knowledge base: setup, ingest, query, update, lint, graph, and shared knowledge context.",
   "author": {
     "name": "CCLUCKY"
   },
