@@ -96,6 +96,19 @@ The agents use separate MCP connections but access the same user's Notion worksp
 
 See [Agent setup](docs/agent-setup.md).
 
+## Skill source of truth and Notion mirror
+
+There are two distinct sources of truth:
+
+- **GitHub `main` is the only source of truth for Skill instructions, metadata, references, and distribution packages.** Make changes here through pull requests.
+- **Notion `System → Knowledge Skills` is a delivery mirror** that exposes the GitHub-sourced Skills to ChatGPT and other agents connected through Notion MCP. Do not independently edit workflow instructions in the Notion copies.
+- **Notion `CCLUCKY Knowledge OS` remains the source of truth for personal knowledge data** (Rows, Sources, Entities, Concepts, Syntheses, and System content).
+
+After a Skill change is merged into `main`, sync the affected Skill and its complete `references/` directory to the matching Notion Skill page. Preserve its page identity and enabled settings. Verify it appears in `notion_get_enabled_skills` and can be loaded with `notion_download_skill` before retiring an older copy.
+
+Notion synchronization is deliberately separate from public CI: this repository must never contain Notion credentials, workspace IDs, or personal knowledge exports. See [Notion Skill mirror sync](docs/notion-sync.md).
+
+
 ## How the knowledge workflow works
 
 ~~~text

@@ -5,7 +5,7 @@ display_name: "KB Ingest"
 display_name_en: "kb-ingest"
 description_zh: "将用户明确要求保存的资料写入 Inbox → Rows，并沉淀为规范知识页面。"
 description_en: "CCLUCKY Notion knowledge-management Skill: kb-ingest."
-version: "0.3.0"
+version: "0.3.1"
 author: "CCLUCKY"
 ---
 
@@ -15,7 +15,11 @@ Use this Skill when the user explicitly wants source material or a decision pres
 
 ## Before starting
 
-1. Call the Skill tool with **knowledge-context** and apply its shared workspace, provenance, safety, and concurrency rules.
+1. Load **knowledge-context** using the host's native Skill mechanism before operating:
+
+   - If the host exposes a Skill tool, call it with `knowledge-context`.
+   - If the host uses Notion MCP Skills, find `knowledge-context` in `notion_get_enabled_skills` and load it with `notion_download_skill` using its page ID. If the host already injected it automatically, apply the injected context without downloading it again.
+   - If neither mechanism is available, stop and report that the shared context could not be loaded; do not guess the workspace model or safety rules.
 2. Read [references/ingest.md](references/ingest.md).
 3. Confirm the connected Notion MCP exposes the operations required for the requested workflow. If a required operation is unavailable, explain the limitation before claiming completion.
 
